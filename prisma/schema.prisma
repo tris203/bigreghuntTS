@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model dotd {
+  did  Int      @unique(map: "4did") @default(autoincrement()) @map("4did")
+  date DateTime @default(now()) @db.DateTime(0)
+  reg  String   @db.VarChar(9)
+
+  @@map("4dotd")
+}
+
+model bonusmulti {
+  bonusid Int      @id @default(autoincrement())
+  userid  Int
+  fileid  Int
+  multi   Float    @db.Float
+  reason  String   @db.VarChar(32)
+  added   DateTime @default(now()) @db.DateTime(0)
+
+  // Define relationships
+  user user  @relation(fields: [userid], references: [id])
+  file files @relation(fields: [fileid], references: [id])
+}
+
+model faq {
+  faqid    Int    @id @default(autoincrement())
+  Section  String @db.VarChar(32)
+  Question String @db.VarChar(500)
+  Answer   String @db.VarChar(500)
+}
+
+model files {
+  id        Int      @id @default(autoincrement())
+  filename  String?  @db.VarChar(32)
+  ext       String?  @db.VarChar(4)
+  regnumber String?  @db.VarChar(7)
+  userid    Int
+  created   DateTime @default(now()) @db.Timestamp(0)
+  value     Decimal? @db.Decimal(8, 2)
+  deleted   Boolean  @default(false)
+
+  // Define relationships
+  user           user            @relation(fields: [userid], references: [id])
+  bonusmulti     bonusmulti[]
+  manfix         manfix[]
+  report_files   report_files[]
+  require_manfix require_manfix?
+}
+
+model manfix {
+  manfixid   Int      @id @default(autoincrement())
+  fileid     Int
+  regnumber  String   @db.VarChar(32)
+  userid     Int
+  date_fixed DateTime @default(now()) @db.DateTime(0)
+
+  // Define relationships
+  user user  @relation(fields: [userid], references: [id])
+  file files @relation(fields: [fileid], references: [id])
+}
+
+model report_files {
+  ReportID    Int      @id @default(autoincrement())
+  FileID      Int
+  ReasonID    Int
+  UserID      Int
+  Report_Time DateTime @default(now()) @db.DateTime(0)
+  Acknowledge Boolean?
+
+  // Define relationships
+  user   user           @relation(fields: [UserID], references: [id])
+  file   files          @relation(fields: [FileID], references: [id])
+  reason report_reasons @relation(fields: [ReasonID], references: [ReasonID])
+}
+
+model report_reasons {
+  ReasonID     Int            @id @default(autoincrement())
+  ReportReason String         @db.VarChar(32)
+  report_files report_files[]
+}
+
+model require_manfix {
+  manfixreqid Int      @id @default(autoincrement())
+  fileid      Int      @unique(map: "uniquefile")
+  userid      Int
+  date        DateTime @default(now()) @db.DateTime(0)
+
+  // Define relationships
+  user user  @relation(fields: [userid], references: [id])
+  file files @relation(fields: [fileid], references: [id])
+}
+
+model user {
+  id       Int     @id @default(autoincrement())
+  email    String  @db.VarChar(32)
+  password String? @db.VarChar(32)
+  nickname String  @default("TEST") @db.VarChar(32)
+  admin    Boolean @default(false)
+
+  // Define reverse relationships
+  bonusmultis     bonusmulti[]
+  files           files[]
+  manfixes        manfix[]
+  reportFiles     report_files[]
+  requireManfixes require_manfix[]
+}
