@@ -25,14 +25,18 @@ async function Header() {
 
       <span>
         {session?.user?.name ? (
-          <span className='top-navigation-icon flex'>
-            <FaUserCircle size='24' className='top-navigation-icon' />
-            <span className='hidden md:flex'>{session.user?.name}</span>
-          </span>
+          <a href='/api/auth/signin'>
+            <span className='top-navigation-icon flex'>
+              <FaUserCircle size='24' className='top-navigation-icon' />
+              <span className='hidden md:flex'>{session.user?.name}</span>
+            </span>
+          </a>
         ) : (
           <span className='top-navigation-icon flex'>
-            <PiSignInBold size='24' className='top-navigation-icon' />
-            <span className='hidden md:flex'>Sign in</span>
+            <a href='/api/auth/signin'>
+              <PiSignInBold size='24' className='top-navigation-icon' />
+              <span className='hidden md:flex'>Sign in</span>
+            </a>
           </span>
         )}
       </span>
