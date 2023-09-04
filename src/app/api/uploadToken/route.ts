@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import ImageKit from 'imagekit';
 
-export async function GET() {
+const handler = () => {
   const imagekit = new ImageKit({
     publicKey: process.env.IMAGEKIT_PUBLIC_KEY as string,
     privateKey: process.env.IMAGEKIT_PRIVATE_KEY as string,
@@ -9,6 +9,6 @@ export async function GET() {
   });
   const token = imagekit.getAuthenticationParameters();
   return NextResponse.json(token);
-}
+};
 
-export default GET;
+export { handler as GET, handler as POST };

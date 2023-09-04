@@ -6,7 +6,7 @@ async function Upload() {
   return (
     <div>
       <h1>ImageKit React quick start</h1>
-      <CDNUpload publicKey={publicKey} urlEndpoint={urlEndpoint} />
+      <CDNUpload publicKey={publicKey || ''} urlEndpoint={urlEndpoint || ''} />
     </div>
   );
 }
