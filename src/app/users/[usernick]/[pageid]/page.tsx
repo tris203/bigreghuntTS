@@ -32,7 +32,7 @@ export default async function UserNickPage({
       <div className='ml-2 mt-1 inline-flex'>
         <h3 className='mr-2 pb-2 text-sm font-bold text-gray-800'>POSTS</h3>
       </div>
-      <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-5'>
+      <div className='mx-2 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-5'>
         {data.map((registration) => (
           <TableBody registration={registration} key={registration.id} />
         ))}

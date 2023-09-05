@@ -39,4 +39,8 @@
     font-semibold  text-gray-500
     placeholder-gray-500 outline-none;
   }
+
+  body {
+    @apply bg-slate-400;
+  }
 }

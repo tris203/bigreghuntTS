@@ -59,7 +59,7 @@ export default async function Page() {
       </div>
       <div className='col-span-4 flex w-full justify-center'>
         {last5 ? (
-          <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-5'>
+          <div className='mx-2 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-5'>
             {last5.map((registration) => (
               <TableBody registration={registration} key={registration.id} />
             ))}
