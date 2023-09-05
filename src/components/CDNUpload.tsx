@@ -54,7 +54,6 @@ async function CDNUpload({
       urlEndpoint={urlEndpoint}
       authenticator={authenticator}
     >
-      <p>Upload an image</p>
       <IKUpload
         fileName='brh_'
         folder='brh_upload_images/brh_images'

@@ -13,21 +13,20 @@ export default async function Page() {
 
   return (
     <div>
-      <div className='grid w-full grid-cols-2 grid-rows-2 justify-center gap-4 text-center '>
-        <div className='w-full text-center align-middle'>
+      <div className='grid w-full grid-cols-2 grid-rows-2 gap-4'>
+        <div className='mt-2 w-full text-center align-middle'>
           <div className='flex w-full justify-center text-center text-2xl font-semibold text-gray-700'>
             4DOTD
           </div>
-          <div className='flex w-full justify-center'>
+          <div className='flex w-full justify-center '>
             <div className='plate'>{dotd?.reg}</div>
           </div>
-          <div className='flex w-full justify-center text-center'>
+          <div className='col-span-2 flex w-full justify-center text-center'>
             Find and upload the 4DOTD to score 10x Points
           </div>
         </div>
         <div className='w-full justify-center align-middle'>
-          {' '}
-          <div className='col-span-2 flex w-full justify-center'>
+          <div className='col-span-2 mt-2 flex w-full justify-center align-middle '>
             {session?.user?.name ? (
               <UserSummaryHome usernick={session.user.name} />
             ) : (
@@ -40,7 +39,7 @@ export default async function Page() {
             )}
           </div>
         </div>
-        <div className='col-span-2 justify-center text-center align-middle'>
+        <div className='row-start-2 justify-center text-center align-middle'>
           {session?.user?.name ? (
             <Upload />
           ) : (
@@ -54,10 +53,8 @@ export default async function Page() {
         </div>
       </div>
 
-      <div className='col-span-4 flex w-full justify-center'>
-        Last 5 Uploads
-      </div>
-      <div className='col-span-4 flex w-full justify-center'>
+      <div className='flex w-full justify-center'>Last 5 Uploads</div>
+      <div className='flex w-full justify-center'>
         {last5 ? (
           <div className='mx-2 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-5'>
             {last5.map((registration) => (
