@@ -7,7 +7,7 @@ export async function getData(perPage: number, page: number, userNick: string) {
   const files = prisma.files.findMany({
     include: {
       bonusmulti: true,
-      user: { select: { nickname: true } },
+      user: { select: { nickname: true, pfp: true } },
     },
     where: { user: { nickname: userNick } },
     skip: pageCalc * perPage || 0,
@@ -18,17 +18,14 @@ export async function getData(perPage: number, page: number, userNick: string) {
   return files;
 }
 
-export async function getAllData(perPage: number, page: number) {
-  let pageCalc = page - 1;
-  if (pageCalc < 0) pageCalc = 0;
-
+export async function getLast5() {
   const files = prisma.files.findMany({
     include: {
       bonusmulti: true,
       user: { select: { nickname: true } },
     },
-    skip: pageCalc * perPage || 0,
-    take: perPage,
+    skip: 0,
+    take: 5,
     orderBy: { created: 'desc' },
   });
 
@@ -103,7 +100,7 @@ export async function getSpecificReg(regnumber: number) {
   const files = prisma.files.findMany({
     include: {
       bonusmulti: true,
-      user: { select: { nickname: true } },
+      user: { select: { nickname: true, pfp: true } },
     },
     where: { regnumber: regnumber.toString() },
     orderBy: { created: 'desc' },

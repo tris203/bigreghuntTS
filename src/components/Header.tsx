@@ -10,7 +10,7 @@ import ProfilePic from './ProfilePic';
 
 async function Header() {
   const session = await getServerSession(options);
-  console.log(session);
+
   return (
     <div className='top-navigation'>
       <a href='/'>

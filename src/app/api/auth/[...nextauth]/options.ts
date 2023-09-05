@@ -52,7 +52,8 @@ export const options: NextAuthOptions = {
       ...session,
       user: {
         ...session.user,
-        id: token.id,
+        id: token.id as string,
+        image: token.image as string,
       },
     }),
     jwt: ({ token, user }) => {
@@ -60,7 +61,8 @@ export const options: NextAuthOptions = {
         const u = user as unknown as any;
         return {
           ...token,
-          id: u.id,
+          id: u.id as string,
+          image: u.image as string,
         };
       }
       return token;

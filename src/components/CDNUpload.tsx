@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { IKContext, IKUpload } from 'imagekitio-react';
+import { useRouter } from 'next/navigation';
 
 const authenticator = async () => {
   try {
@@ -22,14 +23,6 @@ const authenticator = async () => {
   }
 };
 
-const onError = (err: any) => {
-  console.log('Error', err);
-};
-
-const onSuccess = (res: any) => {
-  console.log('Success', res);
-};
-
 async function CDNUpload({
   publicKey,
   urlEndpoint,
@@ -37,6 +30,24 @@ async function CDNUpload({
   publicKey: string;
   urlEndpoint: string;
 }) {
+  const router = useRouter();
+
+  const onError = (err: any) => {
+    console.log('Error', err);
+  };
+
+  const onSuccess = async (res: any) => {
+    const filename = res.name;
+    const reply = await fetch('/api/upload', {
+      method: 'POST',
+      body: JSON.stringify({ filename }),
+    }).then((res) => {
+      if (res.ok) {
+        router.refresh();
+      }
+    });
+  };
+
   return (
     <IKContext
       publicKey={publicKey}
@@ -46,6 +57,7 @@ async function CDNUpload({
       <p>Upload an image</p>
       <IKUpload
         fileName='brh_'
+        folder='brh_upload_images/brh_images'
         useUniqueFileName
         onError={onError}
         onSuccess={onSuccess}

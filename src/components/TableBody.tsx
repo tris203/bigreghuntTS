@@ -4,11 +4,12 @@ import { AiFillFlag } from 'react-icons/ai';
 import { FaNotEqual } from 'react-icons/fa';
 import CDNImage from './CDNImage';
 import RegistrationDisplay from './RegistrationDisplay';
+import ProfilePic from './ProfilePic';
 
 type filesWithUserBonsMulti = Prisma.filesGetPayload<{
   include: {
     bonusmulti: true;
-    user: { select: { nickname: true } };
+    user: { select: { nickname: true; pfp: true } };
   };
 }>;
 
@@ -20,6 +21,7 @@ export default function TableBody({
   return (
     <div className='mb-2 flex w-full flex-wrap rounded-sm border bg-white px-2'>
       <div className='flex items-center px-4 py-3'>
+        <ProfilePic pfpURL={registration.user.pfp} />
         <div className='ml-3 '>
           <span className='block text-sm font-semibold leading-tight antialiased'>
             {registration.user.nickname}
@@ -30,7 +32,11 @@ export default function TableBody({
         </div>
       </div>
       <CDNImage
-        filename={`${registration.filename}.${registration.ext}`}
+        filename={
+          registration.ext
+            ? `${registration.filename}.${registration.ext}`
+            : `${registration.filename}`
+        }
         regNumber={registration.regnumber}
       />
       <div className='mx-4 mb-2 mt-3 flex w-full items-center justify-between'>
