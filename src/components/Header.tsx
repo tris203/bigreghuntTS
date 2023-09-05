@@ -6,6 +6,7 @@ import { getServerSession } from 'next-auth/next';
 import SearchBox from './SearchBox';
 import { options } from '@/app/api/auth/[...nextauth]/options';
 import { PiSignInBold } from 'react-icons/pi';
+import ProfilePic from './ProfilePic';
 
 async function Header() {
   const session = await getServerSession(options);
@@ -25,9 +26,9 @@ async function Header() {
 
       <span>
         {session?.user?.name ? (
-          <a href='/api/auth/signin'>
+          <a href='/api/auth/signout'>
             <span className='top-navigation-icon flex'>
-              <FaUserCircle size='24' className='top-navigation-icon' />
+              <ProfilePic pfpURL={session.user?.image} />
               <span className='hidden md:flex'>{session.user?.name}</span>
             </span>
           </a>

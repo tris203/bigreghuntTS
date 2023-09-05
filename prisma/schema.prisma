@@ -22,10 +22,11 @@ model bonusmulti {
   multi   Float    @db.Float
   reason  String   @db.VarChar(32)
   added   DateTime @default(now()) @db.DateTime(0)
+  file    files    @relation(fields: [fileid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_bonusmulti_files")
+  user    user     @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_bonusmulti_users")
 
-  // Define relationships
-  user user  @relation(fields: [userid], references: [id])
-  file files @relation(fields: [fileid], references: [id])
+  @@index([fileid], map: "fk_bonusmulti_files")
+  @@index([userid], map: "fk_bonusmulti_users")
 }
 
 model faq {
@@ -36,21 +37,19 @@ model faq {
 }
 
 model files {
-  id        Int      @id @default(autoincrement())
-  filename  String?  @db.VarChar(32)
-  ext       String?  @db.VarChar(4)
-  regnumber String?  @db.VarChar(7)
-  userid    Int
-  created   DateTime @default(now()) @db.Timestamp(0)
-  value     Decimal? @db.Decimal(8, 2)
-  deleted   Boolean  @default(false)
+  id         Int          @id @default(autoincrement())
+  filename   String?      @db.VarChar(32)
+  ext        String?      @db.VarChar(4)
+  regnumber  String?      @db.VarChar(7)
+  userid     Int
+  created    DateTime     @default(now()) @db.Timestamp(0)
+  value      Decimal?     @db.Decimal(8, 2)
+  deleted    Boolean      @default(false)
+  bonusmulti bonusmulti[]
+  user       user         @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_files_user")
+  manfix     manfix[]
 
-  // Define relationships
-  user           user            @relation(fields: [userid], references: [id])
-  bonusmulti     bonusmulti[]
-  manfix         manfix[]
-  report_files   report_files[]
-  require_manfix require_manfix?
+  @@index([userid], map: "fk_files_user")
 }
 
 model manfix {
@@ -59,10 +58,11 @@ model manfix {
   regnumber  String   @db.VarChar(32)
   userid     Int
   date_fixed DateTime @default(now()) @db.DateTime(0)
+  file       files    @relation(fields: [fileid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_manfix_files")
+  user       user     @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_manfix_user")
 
-  // Define relationships
-  user user  @relation(fields: [userid], references: [id])
-  file files @relation(fields: [fileid], references: [id])
+  @@index([fileid], map: "fk_manfix_files")
+  @@index([userid], map: "fk_manfix_user")
 }
 
 model report_files {
@@ -72,17 +72,11 @@ model report_files {
   UserID      Int
   Report_Time DateTime @default(now()) @db.DateTime(0)
   Acknowledge Boolean?
-
-  // Define relationships
-  user   user           @relation(fields: [UserID], references: [id])
-  file   files          @relation(fields: [FileID], references: [id])
-  reason report_reasons @relation(fields: [ReasonID], references: [ReasonID])
 }
 
 model report_reasons {
-  ReasonID     Int            @id @default(autoincrement())
-  ReportReason String         @db.VarChar(32)
-  report_files report_files[]
+  ReasonID     Int    @id @default(autoincrement())
+  ReportReason String @db.VarChar(32)
 }
 
 model require_manfix {
@@ -90,23 +84,16 @@ model require_manfix {
   fileid      Int      @unique(map: "uniquefile")
   userid      Int
   date        DateTime @default(now()) @db.DateTime(0)
-
-  // Define relationships
-  user user  @relation(fields: [userid], references: [id])
-  file files @relation(fields: [fileid], references: [id])
 }
 
 model user {
-  id       Int     @id @default(autoincrement())
-  email    String  @db.VarChar(32)
-  password String? @db.VarChar(32)
-  nickname String  @default("TEST") @db.VarChar(32)
-  admin    Boolean @default(false)
-
-  // Define reverse relationships
-  bonusmultis     bonusmulti[]
-  files           files[]
-  manfixes        manfix[]
-  reportFiles     report_files[]
-  requireManfixes require_manfix[]
+  id          Int          @id @default(autoincrement())
+  email       String       @db.VarChar(32)
+  password    String?      @db.VarChar(32)
+  nickname    String       @default("TEST") @db.VarChar(32)
+  admin       Boolean      @default(false)
+  pfp         String?      @db.VarChar(45)
+  bonusmultis bonusmulti[]
+  files       files[]
+  manfixes    manfix[]
 }
