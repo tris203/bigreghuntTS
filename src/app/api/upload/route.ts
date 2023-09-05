@@ -6,7 +6,16 @@ export async function POST(req: Request) {
   const session = await getServerSession(options);
   const body = await req.json();
   const filename = body.filename;
-  const userId = Number(session?.user?.id) || 1;
+
+  // Define SessionUser type as an object with a user property containing an id property
+  type SessionUser = {
+    user: {
+      id?: string;
+    };
+  };
+
+  // Cast session?.user?.id as SessionUser and extract the id property
+  const userId = Number((session?.user as SessionUser)?.user?.id) || 1; // Provide a default value if id doesn't exist
 
   const newRecord = await prisma.files.create({
     data: {

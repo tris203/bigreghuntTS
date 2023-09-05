@@ -22,7 +22,7 @@ export async function getLast5() {
   const files = prisma.files.findMany({
     include: {
       bonusmulti: true,
-      user: { select: { nickname: true } },
+      user: { select: { nickname: true, pfp: true } },
     },
     skip: 0,
     take: 5,

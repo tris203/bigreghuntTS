@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment } from 'react';
 import { GetAllUserScores } from '@/lib/prismaFunctions';
 
 export default async function Leaderboard() {
@@ -30,7 +30,7 @@ export default async function Leaderboard() {
           Total Value
         </div>
         {users.map((user) => (
-          <>
+          <Fragment key={user.userid}>
             <div className='text-center text-sm text-gray-800'>
               {user.Rank.toString()}
             </div>
@@ -72,7 +72,7 @@ export default async function Leaderboard() {
                 minimumFractionDigits: 2,
               })}
             </div>
-          </>
+          </Fragment>
         ))}
       </div>
     </>
