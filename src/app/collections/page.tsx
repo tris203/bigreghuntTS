@@ -2,13 +2,14 @@
 import PercentageComplete from '@/components/PercentageComplete';
 import { getAllNumberbyLength } from '@/lib/prismaFunctions';
 import { countPlatesAvailable } from '@/lib/static';
+import { Fragment } from 'react';
 
 async function AvailableCollections() {
   const availableCollections = await getAllNumberbyLength();
   return (
     <div className='grid w-full grid-cols-1 px-4'>
       {availableCollections.map((collection) => (
-        <>
+        <Fragment key={collection.length}>
           <div className='text-center text-4xl font-bold'>
             <a href={`/collections/${collection.length}`}>
               {collection.length} Digit Plates
@@ -26,7 +27,7 @@ async function AvailableCollections() {
               total={countPlatesAvailable(collection.length)}
             />
           </div>
-        </>
+        </Fragment>
       ))}
     </div>
   );
