@@ -58,6 +58,7 @@ export const options: NextAuthOptions = {
     }),
     jwt: ({ token, user }) => {
       if (user) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const u = user as unknown as any;
         return {
           ...token,

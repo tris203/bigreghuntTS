@@ -4,9 +4,7 @@ import CDNUpload from '@/components/CDNUpload';
 
 async function Upload() {
   return (
-    <div>
-      <CDNUpload publicKey={publicKey || ''} urlEndpoint={urlEndpoint || ''} />
-    </div>
+    <CDNUpload publicKey={publicKey || ''} urlEndpoint={urlEndpoint || ''} />
   );
 }
 

@@ -31,14 +31,16 @@ export default function TableBody({
           </span>
         </div>
       </div>
-      <CDNImage
-        filename={
-          registration.ext
-            ? `${registration.filename}.${registration.ext}`
-            : `${registration.filename}`
-        }
-        regNumber={registration.regnumber}
-      />
+      <div className='container relative h-96'>
+        <CDNImage
+          filename={
+            registration.ext
+              ? `${registration.filename}.${registration.ext}`
+              : `${registration.filename}`
+          }
+          regNumber={registration.regnumber}
+        />
+      </div>
       <div className='mx-4 mb-2 mt-3 flex w-full items-center justify-between'>
         <div className='flex gap-5'>
           <RegistrationDisplay regNumber={registration.regnumber} />

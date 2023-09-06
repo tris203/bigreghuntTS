@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import { useTransition } from 'react';
 import { IKContext, IKUpload } from 'imagekitio-react';
 import { useRouter } from 'next/navigation';
 
@@ -31,19 +31,27 @@ async function CDNUpload({
   urlEndpoint: string;
 }) {
   const router = useRouter();
+  const [, startTransition] = useTransition();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onError = (err: any) => {
-    console.log('Error', err);
+    // console.log('Error', err);
+    throw new Error(`Image upload failed: ${err}`);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSuccess = async (res: any) => {
     const filename = res.name;
-    const reply = await fetch('/api/upload', {
+    await fetch('/api/upload', {
       method: 'POST',
       body: JSON.stringify({ filename }),
-    }).then((res) => {
-      if (res.ok) {
-        router.refresh();
+    }).then((result) => {
+      if (result.ok) {
+        startTransition(() => {
+          setTimeout(() => {
+            router.refresh();
+          }, 250);
+        });
       }
     });
   };
@@ -55,6 +63,8 @@ async function CDNUpload({
       authenticator={authenticator}
     >
       <IKUpload
+        className='mx-2 block w-full cursor-pointer rounded-lg border border-gray-600 bg-gray-700 text-sm text-gray-400 placeholder-gray-400 file:mx-2
+        file:rounded-lg file:border-gray-600 file:bg-gray-700 file:text-gray-400'
         fileName='brh_'
         folder='brh_upload_images/brh_images'
         useUniqueFileName

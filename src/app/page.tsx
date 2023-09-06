@@ -1,52 +1,43 @@
-import UserSummaryHome from '@/components/UserSummaryHome';
 import './globals.css';
-import { get4DOTD } from '@/lib/prismaFunctions';
 import { getServerSession } from 'next-auth/next';
-import { getLast5 } from '@/lib/prismaFunctions';
+import { get4DOTD, getLast5 } from '@/lib/prismaFunctions';
 import TableBody from '@/components/TableBody';
 import Upload from './upload/page';
+import UserSummaryHome from '@/components/UserSummaryHome';
+// import UserSummaryHome from '@/components/UserSummaryHome';
 
 export default async function Page() {
   const dotd = await get4DOTD();
   const session = await getServerSession();
+
   const last5 = await getLast5();
 
   return (
     <div>
-      <div className='grid w-full grid-cols-2 grid-rows-2 gap-4'>
-        <div className='mt-2 w-full text-center align-middle'>
+      <div className='grid grid-cols-2 gap-4'>
+        <div className='w-full flex-col justify-center'>
           <div className='flex w-full justify-center text-center text-2xl font-semibold text-gray-700'>
             4DOTD
           </div>
           <div className='flex w-full justify-center '>
             <div className='plate'>{dotd?.reg}</div>
           </div>
-          <div className='col-span-2 flex w-full justify-center text-center'>
+          <div className='flex w-full justify-center text-center'>
             Find and upload the 4DOTD to score 10x Points
           </div>
         </div>
-        <div className='w-full justify-center align-middle'>
-          <div className='col-span-2 mt-2 flex w-full justify-center align-middle '>
-            {session?.user?.name ? (
-              <UserSummaryHome usernick={session.user.name} />
-            ) : (
-              <div>
-                <div className='pointer-events-none blur-sm'>
-                  <UserSummaryHome usernick='TrisK' />
-                </div>
-                Please Log In to View Your Stats
-              </div>
-            )}
-          </div>
+        <div className='mt-2 w-full justify-center text-center '>
+          <UserSummaryHome usernick='TrisK' />
         </div>
-        <div className='row-start-2 justify-center text-center align-middle'>
+      </div>
+
+      <div className='grid grid-cols-3 grid-rows-1 gap-4'>
+        <div className='col-start-2'>
           {session?.user?.name ? (
             <Upload />
           ) : (
-            <div>
-              <div className='pointer-events-none blur-sm'>
-                <Upload />
-              </div>
+            <div className='pointer-events-none blur-sm'>
+              <Upload />
               Please Log In to Upload
             </div>
           )}

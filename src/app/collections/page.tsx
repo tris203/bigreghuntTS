@@ -1,8 +1,8 @@
 /* eslint-disable react/jsx-one-expression-per-line */
+import { Fragment } from 'react';
 import PercentageComplete from '@/components/PercentageComplete';
 import { getAllNumberbyLength } from '@/lib/prismaFunctions';
 import { countPlatesAvailable } from '@/lib/static';
-import { Fragment } from 'react';
 
 async function AvailableCollections() {
   const availableCollections = await getAllNumberbyLength();

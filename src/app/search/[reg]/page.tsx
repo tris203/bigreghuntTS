@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
 import { getSpecificReg } from '@/lib/prismaFunctions';
 import TableBody from '@/components/TableBody';

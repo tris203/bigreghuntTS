@@ -1,11 +1,11 @@
 import React from 'react';
-import { FaUserCircle, FaHome } from 'react-icons/fa';
+import { FaHome } from 'react-icons/fa';
 import { MdLeaderboard } from 'react-icons/md';
 import { TbRulerMeasure } from 'react-icons/tb';
 import { getServerSession } from 'next-auth/next';
+import { PiSignInBold } from 'react-icons/pi';
 import SearchBox from './SearchBox';
 import { options } from '@/app/api/auth/[...nextauth]/options';
-import { PiSignInBold } from 'react-icons/pi';
 import ProfilePic from './ProfilePic';
 
 async function Header() {

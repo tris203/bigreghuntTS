@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
 import { GetAllUserScores } from '@/lib/prismaFunctions';
 
@@ -24,55 +25,47 @@ async function UserSummary({ usernick }: { usernick: string }) {
   const data = await selectUserFromData(usernick, dbData);
 
   return (
-    <div className='grid h-20 grid-cols-3'>
-      <div className='col-span-3 flex w-full justify-center'>
+    <div className='w-full flex-col justify-center text-center'>
+      <div className='flex w-full justify-center'>
         <div className='plate'>{data.nickname}</div>
       </div>
-      <div className='col-span-3 flex w-full justify-center'>
-        <div className='mr-2 flex w-full text-base font-semibold text-gray-700'>
-          {data.FixedNumber.toString()} Fixed
-        </div>
+      <div className='flex w-full justify-center text-center text-base font-semibold text-gray-700'>
+        {data.FixedNumber.toString()} Fixed
       </div>
-      <div className='col-span-3 flex w-full justify-center'>
-        <div className='mr-2 flex w-full text-base font-semibold text-gray-700'>
-          £
-          {data.FixedTotal.toLocaleString(undefined, {
-            maximumFractionDigits: 2,
-            minimumFractionDigits: 2,
-          })}
-        </div>
+      <div className='flex w-full justify-center text-center text-base font-semibold text-gray-700'>
+        £
+        {data.FixedTotal.toLocaleString(undefined, {
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2,
+        })}
       </div>
-      <div className='col-span-3 flex w-full justify-center'>
-        <div className='mr-2 flex w-full text-base font-semibold text-gray-700'>
-          {data.UploadNumber.toString()} Uploaded
-        </div>
+
+      <div className='flex w-full justify-center text-center text-base font-semibold text-gray-700'>
+        {data.UploadNumber.toString()} Uploaded
       </div>
-      <div className='col-span-3 flex w-full justify-center'>
-        <div className='mr-2 flex w-full text-base font-semibold text-gray-700'>
-          £
-          {data.UploadTotal.toLocaleString(undefined, {
-            maximumFractionDigits: 2,
-            minimumFractionDigits: 2,
-          })}
-        </div>
+
+      <div className='flex w-full justify-center text-center text-base font-semibold text-gray-700'>
+        £
+        {data.UploadTotal.toLocaleString(undefined, {
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2,
+        })}
       </div>
-      <div className='col-span-3 flex w-full justify-center'>
-        <div className='mr-2 flex w-full text-base font-semibold text-gray-700'>
-          £
-          {data.total.toLocaleString(undefined, {
-            maximumFractionDigits: 2,
-            minimumFractionDigits: 2,
-          })}
-        </div>
+
+      <div className='flex w-full justify-center text-center text-base font-semibold text-gray-700'>
+        £
+        {data.total.toLocaleString(undefined, {
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2,
+        })}
       </div>
-      <div className='col-span-3 flex w-full justify-center'>
-        <div className='mr-2 flex w-full text-base font-semibold text-gray-700'>
-          <b>{data.Rank.toString()}</b>
-          {data.Rank.toString() === '1' ? 'st' : ''}
-          {data.Rank.toString() === '2' ? 'nd' : ''}
-          {data.Rank.toString() === '3' ? 'rd' : ''}
-          {data.Rank > 3 ? 'th' : ''}/{dbData.length.toString()}
-        </div>
+
+      <div className='flex w-full justify-center text-center text-base font-semibold text-gray-700'>
+        <b>{data.Rank.toString()}</b>
+        {data.Rank.toString() === '1' ? 'st' : ''}
+        {data.Rank.toString() === '2' ? 'nd' : ''}
+        {data.Rank.toString() === '3' ? 'rd' : ''}
+        {data.Rank > 3 ? 'th' : ''}/{dbData.length.toString()}
       </div>
     </div>
   );
