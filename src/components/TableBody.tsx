@@ -33,6 +33,7 @@ export default function TableBody({
       </div>
       <div className='container relative h-96'>
         <CDNImage
+          key={registration.id}
           filename={
             registration.ext
               ? `${registration.filename}.${registration.ext}`
