@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 const authenticator = async () => {
   try {
-    const response = await fetch('/api/uploadToken', { cache: 'no-cache' });
+    const response = await fetch('/api/uploadToken', { cache: 'no-store' });
 
     if (!response.ok) {
       const errorText = await response.text();
