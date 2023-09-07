@@ -9,7 +9,7 @@ export default async function UserNickPage({
 }: {
   params: { pageid: number; usernick: string };
 }) {
-  const data = await getData(perPage, params.pageid, params.usernick);
+  const data = await getData(params.pageid, params.usernick);
   const count = await getCount(params.usernick);
   const pages = Math.ceil(count / perPage);
 

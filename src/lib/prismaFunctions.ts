@@ -1,10 +1,11 @@
 import { prisma } from '@/lib/prisma';
+import { perPage } from './static';
 
-export async function getData(perPage: number, page: number, userNick: string) {
+export async function getData(page: number, userNick: string) {
   let pageCalc = page - 1;
   if (pageCalc < 0) pageCalc = 0;
 
-  const files = prisma.files.findMany({
+  const filesReturn = prisma.files.findMany({
     include: {
       bonusmulti: true,
       user: { select: { nickname: true, pfp: true } },
@@ -15,11 +16,11 @@ export async function getData(perPage: number, page: number, userNick: string) {
     orderBy: { created: 'desc' },
   });
 
-  return files;
+  return filesReturn;
 }
 
 export async function getLast5() {
-  const files = prisma.files.findMany({
+  const filesReturn = prisma.files.findMany({
     include: {
       bonusmulti: true,
       user: { select: { nickname: true, pfp: true } },
@@ -29,7 +30,7 @@ export async function getLast5() {
     orderBy: { created: 'desc' },
   });
 
-  return files;
+  return filesReturn;
 }
 
 export async function GetAllUserScores() {
@@ -75,20 +76,36 @@ export async function getCount(userNick: string) {
   return count;
 }
 
-export async function getFilesWithLength(length: number) {
-  type FileWithLength = {
-    regnumber: string;
-    ids: string;
-    nicknames: string;
-    value: number;
-  };
-  const files = await prisma.$queryRaw`
- SELECT f.regnumber, GROUP_CONCAT(f.id) as 'ids' , GROUP_CONCAT(u.nickname) as 'nicknames', max(f.value) as 'value' from files f
- join user u on f.userid = u.id where length(f.regnumber) = ${length} and f.regnumber NOT IN ('0') and f.deleted = '0'
- GROUP BY f.regnumber
-  order by regnumber asc`;
+export async function getFilesWithLength(length: number, page: number) {
+  let pageCalc = page - 1;
+  if (pageCalc < 0) pageCalc = 0;
 
-  return files as FileWithLength[];
+  type RelatedReg = {
+    regnumber: string;
+  };
+
+  const relatedRegs: RelatedReg[] = await prisma.$queryRaw`
+ SELECT regnumber from files
+ where deleted = '0'
+ and regnumber != '0'
+ and length(regnumber) = ${length}
+ group by regnumber
+ order by regnumber asc
+ limit ${pageCalc * perPage}, ${perPage};`;
+
+  const filesReturn = prisma.files.findMany({
+    include: {
+      bonusmulti: true,
+      user: { select: { nickname: true, pfp: true } },
+    },
+    where: {
+      regnumber: { in: relatedRegs.map((x) => x.regnumber), not: '0' },
+      deleted: false,
+    },
+    orderBy: { regnumber: 'asc' },
+  });
+
+  return filesReturn;
 }
 
 export async function getAllCount() {
@@ -97,7 +114,7 @@ export async function getAllCount() {
 }
 
 export async function getSpecificReg(regnumber: number) {
-  const files = prisma.files.findMany({
+  const filesReturn = prisma.files.findMany({
     include: {
       bonusmulti: true,
       user: { select: { nickname: true, pfp: true } },
@@ -105,7 +122,7 @@ export async function getSpecificReg(regnumber: number) {
     where: { regnumber: regnumber.toString() },
     orderBy: { created: 'desc' },
   });
-  return files;
+  return filesReturn;
 }
 
 export async function get4DOTD() {
@@ -123,6 +140,7 @@ export async function getAllNumberbyLength() {
   const status = await prisma.$queryRaw`
  SELECT count(DISTINCT(regnumber)) as 'count', length(regnumber) as 'length' from files
  where deleted = '0'
+ and regnumber != '0'
  group by length(regnumber)`;
   return status as LengthStatus[];
 }
