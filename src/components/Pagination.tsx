@@ -41,7 +41,7 @@ export default async function Pagination({
         </svg>
       </a>
       {[...Array(numOfPages)].map((_, i) => {
-        if (Math.abs(currentPage - i) <= 4) {
+        if (Math.abs(currentPage - i) <= 3) {
           return (
             <a
               // eslint-disable-next-line react/no-array-index-key
