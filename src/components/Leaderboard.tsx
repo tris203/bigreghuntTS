@@ -40,36 +40,27 @@ export default async function Leaderboard() {
               </div>
             </a>
             <div className='hidden text-center text-sm text-gray-800 md:flex'>
-              {user.UploadNumber.toLocaleString(undefined, {
-                maximumFractionDigits: 0,
-                minimumFractionDigits: 0,
+              {user.UploadNumber.toString()}
+            </div>
+            <div className='hidden text-center text-sm text-gray-800 md:flex'>
+              {user.UploadTotal.toLocaleString('en-GB', {
+                currency: 'GBP',
+                style: 'currency',
               })}
             </div>
             <div className='hidden text-center text-sm text-gray-800 md:flex'>
-              £
-              {user.UploadTotal.toLocaleString(undefined, {
-                maximumFractionDigits: 2,
-                minimumFractionDigits: 2,
-              })}
+              {user.FixedNumber.toString()}
             </div>
             <div className='hidden text-center text-sm text-gray-800 md:flex'>
-              {user.FixedNumber.toLocaleString(undefined, {
-                maximumFractionDigits: 0,
-                minimumFractionDigits: 0,
-              })}
-            </div>
-            <div className='hidden text-center text-sm text-gray-800 md:flex'>
-              £
-              {user.FixedTotal.toLocaleString(undefined, {
-                maximumFractionDigits: 2,
-                minimumFractionDigits: 2,
+              {Number(user.FixedTotal).toLocaleString('en-GB', {
+                currency: 'GBP',
+                style: 'currency',
               })}
             </div>
             <div className='text-center text-sm text-gray-800'>
-              £
-              {user.total.toLocaleString(undefined, {
-                maximumFractionDigits: 2,
-                minimumFractionDigits: 2,
+              {user.total.toLocaleString('en-GB', {
+                currency: 'GBP',
+                style: 'currency',
               })}
             </div>
           </Fragment>

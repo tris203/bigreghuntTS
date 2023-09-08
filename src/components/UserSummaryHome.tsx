@@ -33,10 +33,9 @@ async function UserSummary({ usernick }: { usernick: string }) {
         {data.FixedNumber.toString()} Fixed
       </div>
       <div className='flex w-full justify-center text-center text-base font-semibold text-gray-700'>
-        £
-        {data.FixedTotal.toLocaleString(undefined, {
-          maximumFractionDigits: 2,
-          minimumFractionDigits: 2,
+        {Number(data.FixedTotal).toLocaleString('en-GB', {
+          currency: 'GBP',
+          style: 'currency',
         })}
       </div>
 
@@ -45,18 +44,16 @@ async function UserSummary({ usernick }: { usernick: string }) {
       </div>
 
       <div className='flex w-full justify-center text-center text-base font-semibold text-gray-700'>
-        £
-        {data.UploadTotal.toLocaleString(undefined, {
-          maximumFractionDigits: 2,
-          minimumFractionDigits: 2,
+        {data.UploadTotal.toLocaleString('en-GB', {
+          currency: 'GBP',
+          style: 'currency',
         })}
       </div>
 
       <div className='flex w-full justify-center text-center text-base font-semibold text-gray-700'>
-        £
-        {data.total.toLocaleString(undefined, {
-          maximumFractionDigits: 2,
-          minimumFractionDigits: 2,
+        {data.total.toLocaleString('en-GB', {
+          currency: 'GBP',
+          style: 'currency',
         })}
       </div>
 

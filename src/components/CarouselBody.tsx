@@ -73,7 +73,12 @@ function CarouselBody({ data }: { data: NickPFP[] }) {
       </div>
       <div className='mx-4 mb-2 mt-3 flex w-full items-center justify-between'>
         <div className='flex w-full gap-5 text-sm font-semibold'>
-          {data[0].value ? data[0].value.toLocaleString() : 'Loading...'}
+          {data[0].value
+            ? Number(data[0].value).toLocaleString('en-GB', {
+                currency: 'GBP',
+                style: 'currency',
+              })
+            : 'Loading...'}
         </div>
         <div className='flex'>
           <div className='mx-4 mb-4 mt-2 flex w-full justify-end text-sm'>
