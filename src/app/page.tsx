@@ -39,7 +39,7 @@ export default async function Page() {
       </div>
 
       <div className='grid grid-cols-3 grid-rows-1 gap-4'>
-        <div className='col-start-2'>
+        <div className='col-span-3 col-start-1 mr-5 md:col-span-1 md:col-start-2'>
           {session?.user?.name ? (
             <Upload />
           ) : (
