@@ -1,4 +1,3 @@
-import React from 'react';
 import { GetAllUserScores } from '@/lib/prismaFunctions';
 
 type UserScore = {

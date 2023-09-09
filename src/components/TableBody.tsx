@@ -1,10 +1,9 @@
 /* eslint-disable indent */
 import { Prisma } from '@prisma/client';
-import { AiFillFlag } from 'react-icons/ai';
-import { FaNotEqual } from 'react-icons/fa';
 import CDNImage from './CDNImage';
 import RegistrationDisplay from './RegistrationDisplay';
 import ProfilePic from './ProfilePic';
+import ReportMismatchBar from './ReportMismatchBar';
 
 type filesWithUserBonsMulti = Prisma.filesGetPayload<{
   include: {
@@ -79,10 +78,7 @@ export default function TableBody({
             : 'Loading...'}
         </div>
         <div className='flex'>
-          <div className='mx-4 mb-4 mt-2 flex w-full justify-end text-sm'>
-            <FaNotEqual className='mr-1' />
-            <AiFillFlag className='mr-1' />
-          </div>
+          <ReportMismatchBar fileid={registration.id} />
         </div>
       </div>
     </div>

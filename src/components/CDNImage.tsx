@@ -1,10 +1,9 @@
 'use client';
 
-import React from 'react';
 import Image from 'next/image';
 import imageKitLoader from '@/lib/imageKit';
 
-async function CDNImage({
+function CDNImage({
   filename,
   regNumber,
 }: {

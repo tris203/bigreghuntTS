@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-one-expression-per-line */
-import React from 'react';
 
 async function PercentageComplete({
   completed,

@@ -1,4 +1,3 @@
-import React from 'react';
 import { FaHome } from 'react-icons/fa';
 import { MdLeaderboard } from 'react-icons/md';
 import { TbRulerMeasure } from 'react-icons/tb';

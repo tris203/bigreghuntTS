@@ -2,11 +2,9 @@
 
 'use client';
 
+import { Fragment } from 'react';
 import type { Prisma } from '@prisma/client';
-import React from 'react';
 import { Carousel } from 'flowbite-react';
-import { FaNotEqual } from 'react-icons/fa';
-import { AiFillFlag } from 'react-icons/ai';
 import CDNImage from './CDNImage';
 import ProfilePic from './ProfilePic';
 import RegistrationDisplay from './RegistrationDisplay';
@@ -30,12 +28,12 @@ function CarouselBody({ data }: { data: NickPFP[] }) {
         <div className='ml-3 '>
           <span className='block text-sm font-semibold leading-tight antialiased'>
             {data.map((item: NickPFP, index: number) => (
-              <React.Fragment key={`${item.id}${item.user.nickname}`}>
+              <Fragment key={`${item.id}${item.user.nickname}`}>
                 <span className='font-semibold '>{item.user.nickname}</span>
                 {index !== data.length - 1 && (
                   <span className='font-normal'> and </span>
                 )}
-              </React.Fragment>
+              </Fragment>
             ))}
           </span>
           <span className='block text-xs text-gray-600' />
@@ -81,10 +79,7 @@ function CarouselBody({ data }: { data: NickPFP[] }) {
             : 'Loading...'}
         </div>
         <div className='flex'>
-          <div className='mx-4 mb-4 mt-2 flex w-full justify-end text-sm'>
-            <FaNotEqual className='mr-1' />
-            <AiFillFlag className='mr-1' />
-          </div>
+          {/* <ReportMismatchBar /> issue with reporting from carousel */}
         </div>
       </div>
     </div>

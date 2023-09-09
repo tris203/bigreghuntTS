@@ -1,4 +1,3 @@
-import React from 'react';
 import { publicKey, urlEndpoint } from '@/lib/static';
 import CDNUpload from '@/components/CDNUpload';
 

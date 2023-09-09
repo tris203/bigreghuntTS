@@ -1,7 +1,7 @@
 /* eslint-disable operator-linebreak */
 /* eslint-disable react/jsx-one-expression-per-line */
 import type { Prisma } from '@prisma/client';
-import React from 'react';
+import { Fragment } from 'react';
 import {
   getFilesWithLength,
   getAllNumberbyLength,
@@ -47,10 +47,10 @@ export default async function SpecficCollection({
         <h1>
           Length: {params.length} - Total Found:
           {availableCollections.map((collection) => (
-            <React.Fragment key={collection.length}>
+            <Fragment key={collection.length}>
               {collection.length === Number(params.length) &&
                 collection.count.toString()}
-            </React.Fragment>
+            </Fragment>
           ))}
           /{countPlatesAvailable(params.length)}
         </h1>

@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-one-expression-per-line */
-import React from 'react';
 import { GetAllUserScores } from '@/lib/prismaFunctions';
+import RegistrationDisplay from './RegistrationDisplay';
 
 type UserScore = {
   userid: number;
@@ -27,7 +27,7 @@ async function UserSummary({ usernick }: { usernick: string }) {
   return (
     <div className='w-full flex-col justify-center text-center'>
       <div className='flex w-full justify-center'>
-        <div className='plate'>{data.nickname}</div>
+        <RegistrationDisplay regNumber={data.nickname} />
       </div>
       <div className='flex w-full justify-center text-center text-base font-semibold text-gray-700'>
         {data.FixedNumber.toString()} Fixed

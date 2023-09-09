@@ -4,6 +4,7 @@ import { get4DOTD, getLast5 } from '@/lib/prismaFunctions';
 import TableBody from '@/components/TableBody';
 import Upload from './upload/page';
 import UserSummaryHome from '@/components/UserSummaryHome';
+import RegistrationDisplay from '@/components/RegistrationDisplay';
 // import UserSummaryHome from '@/components/UserSummaryHome';
 
 export default async function Page() {
@@ -20,7 +21,7 @@ export default async function Page() {
             4DOTD
           </div>
           <div className='flex w-full justify-center '>
-            <div className='plate'>{dotd?.reg}</div>
+            <RegistrationDisplay regNumber={dotd?.reg || ''} />
           </div>
           <div className='flex w-full justify-center text-center'>
             Find and upload the 4DOTD to score 10x Points

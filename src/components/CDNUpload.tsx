@@ -23,7 +23,7 @@ const authenticator = async () => {
   }
 };
 
-async function CDNUpload({
+function CDNUpload({
   publicKey,
   urlEndpoint,
 }: {
