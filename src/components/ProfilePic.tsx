@@ -22,8 +22,8 @@ function ProfilePic({
         loader={imageKitLoader}
         alt='Profile picture'
         src={`/brh_upload_images/brh_pfp/${pfpURL}`}
-        height={24}
-        width={24}
+        height={32}
+        width={32}
         style={{
           objectFit: 'contain',
         }}

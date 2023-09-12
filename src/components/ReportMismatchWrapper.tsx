@@ -38,6 +38,7 @@ function ReportMismatchWrapper({
         setOpenModal={setOpenModal}
       />
       <ReportReasonsModal
+        fileid={registration.id}
         reportReasons={reportReasons}
         openModal={openModal}
         setOpenModal={setOpenModal}
