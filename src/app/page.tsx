@@ -1,6 +1,7 @@
 import './globals.css';
 import { getServerSession } from 'next-auth/next';
 import { DefaultSession } from 'next-auth';
+import Link from 'next/link';
 import {
   get4DOTD,
   getLast5,
@@ -46,7 +47,7 @@ export default async function Page() {
           </div>
           <div className='flex w-full justify-center text-center'>
             {manfixRequiredCount > 0 ? (
-              <a href='/manfix'>
+              <Link href='/manfix'>
                 <button
                   type='button'
                   className='my-2 inline-flex items-center rounded bg-gray-200 px-4 py-2 font-bold text-gray-800 hover:bg-gray-300'
@@ -56,7 +57,7 @@ export default async function Page() {
                     {manfixRequiredCount}
                   </span>
                 </button>
-              </a>
+              </Link>
             ) : null}
           </div>
         </div>

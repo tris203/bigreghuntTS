@@ -1,4 +1,5 @@
 import { Fragment } from 'react';
+import Link from 'next/link';
 import { GetAllUserScores } from '@/lib/prismaFunctions';
 
 export default async function Leaderboard() {
@@ -34,11 +35,11 @@ export default async function Leaderboard() {
             <div className='text-center text-sm text-gray-800'>
               {user.Rank.toString()}
             </div>
-            <a href={`/users/${user.nickname}/1`}>
+            <Link href={`/users/${user.nickname}/1`}>
               <div className='text-center text-sm text-gray-800'>
                 {user.nickname.toString()}
               </div>
-            </a>
+            </Link>
             <div className='hidden text-center text-sm text-gray-800 md:flex'>
               {user.UploadNumber.toString()}
             </div>

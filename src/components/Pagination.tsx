@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default async function Pagination({
   numOfPages,
   baseUrl,
@@ -13,7 +15,7 @@ export default async function Pagination({
       className='relative z-0 inline-flex w-full items-center justify-center -space-x-px shadow-sm'
       aria-label='Pagination'
     >
-      <a
+      <Link
         href={`${baseUrl}1`}
         aria-disabled={currentPage === 1 ? 'true' : 'false'}
         className='relative inline-flex cursor-pointer items-center border border-gray-300 bg-white px-2 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10 focus:border-gray-300 focus:outline-offset-0 focus:ring-1 focus:ring-gray-300'
@@ -37,11 +39,11 @@ export default async function Pagination({
             d='m13.707 5.293 1.414 1.414L11.828 10l3.293 3.293-1.414 1.414L9 10l4.707-4.707Z'
           />
         </svg>
-      </a>
+      </Link>
       {[...Array(numOfPages)].map((_, i) => {
         if (Math.abs(currentPage - i) <= 3) {
           return (
-            <a
+            <Link
               // eslint-disable-next-line react/no-array-index-key
               key={i}
               href={`${baseUrl}${i + 1}`}
@@ -49,12 +51,12 @@ export default async function Pagination({
               className='relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0'
             >
               {i + 1}
-            </a>
+            </Link>
           );
         }
         return null;
       })}
-      <a
+      <Link
         href={`${baseUrl}${numOfPages}`}
         aria-disabled={currentPage === numOfPages ? 'true' : 'false'}
         className='relative inline-flex cursor-pointer items-center border border-gray-300 bg-white px-2 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10 focus:border-gray-300 focus:outline-offset-0 focus:ring-1 focus:ring-gray-300'
@@ -78,7 +80,7 @@ export default async function Pagination({
             d='m6.293 14.707-1.414-1.414L8.172 10 4.879 6.707l1.414-1.414L11 10l-4.707 4.707Z'
           />
         </svg>
-      </a>
+      </Link>
     </div>
   );
 }

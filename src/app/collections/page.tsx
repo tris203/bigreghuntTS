@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import { Fragment } from 'react';
+import Link from 'next/link';
 import PercentageComplete from '@/components/PercentageComplete';
 import { getAllNumberbyLength } from '@/lib/prismaFunctions';
 import { countPlatesAvailable } from '@/lib/static';
@@ -11,9 +12,9 @@ async function AvailableCollections() {
       {availableCollections.map((collection) => (
         <Fragment key={collection.length}>
           <div className='text-center text-4xl font-bold'>
-            <a href={`/collections/${collection.length}`}>
+            <Link href={`/collections/${collection.length}`}>
               {collection.length} Digit Plates
-            </a>
+            </Link>
           </div>
           <div className='col-span-1'>
             <div className='text-center text-lg'>

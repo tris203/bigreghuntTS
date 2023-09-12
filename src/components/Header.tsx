@@ -3,6 +3,7 @@ import { MdLeaderboard } from 'react-icons/md';
 import { TbRulerMeasure } from 'react-icons/tb';
 import { getServerSession } from 'next-auth/next';
 import { PiSignInBold } from 'react-icons/pi';
+import Link from 'next/link';
 import SearchBox from './SearchBox';
 import { options } from '@/app/api/auth/[...nextauth]/options';
 import ProfilePic from './ProfilePic';
@@ -12,31 +13,31 @@ async function Header() {
 
   return (
     <div className='top-navigation'>
-      <a href='/'>
+      <Link href='/'>
         <FaHome size='24' className='top-navigation-icon' />
-      </a>
-      <a href='/users'>
+      </Link>
+      <Link href='/users'>
         <MdLeaderboard size='24' className='top-navigation-icon' />
-      </a>
+      </Link>
       <SearchBox />
-      <a href='/collections'>
+      <Link href='/collections'>
         <TbRulerMeasure size='24' className='top-navigation-icon' />
-      </a>
+      </Link>
 
       <span>
         {session?.user?.name ? (
-          <a href='/profile'>
+          <Link href='/profile'>
             <span className='top-navigation-icon flex'>
               <ProfilePic pfpURL={session.user?.image} />
               <span className='hidden md:flex'>{session.user?.name}</span>
             </span>
-          </a>
+          </Link>
         ) : (
           <span className='top-navigation-icon flex'>
-            <a href='/api/auth/signin'>
+            <Link href='/api/auth/signin'>
               <PiSignInBold size='24' className='top-navigation-icon' />
               <span className='hidden md:flex'>Sign in</span>
-            </a>
+            </Link>
           </span>
         )}
       </span>

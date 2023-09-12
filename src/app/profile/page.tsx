@@ -1,4 +1,5 @@
 import { getServerSession } from 'next-auth';
+import Link from 'next/link';
 import { options } from '@/app/api/auth/[...nextauth]/options';
 import ProfilePic from '@/components/ProfilePic';
 
@@ -40,7 +41,7 @@ export default async function Profile() {
               type='button'
               className='flex-1 rounded-full border-2 border-gray-400 bg-red-500 px-4 py-2 font-semibold text-black'
             >
-              <a href='/api/auth/signout'>Sign Out</a>
+              <Link href='/api/auth/signout'>Sign Out</Link>
             </button>
           </div>
         </div>

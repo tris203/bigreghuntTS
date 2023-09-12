@@ -1,6 +1,7 @@
 /* eslint-disable indent */
 /* eslint-disable operator-linebreak */
 import { getServerSession } from 'next-auth/next';
+import Link from 'next/link';
 import { GetAllUserScores } from '@/lib/prismaFunctions';
 
 type UserScore = {
@@ -35,14 +36,14 @@ async function UserSummary({ usernick }: { usernick: string }) {
         {session?.user?.name?.toLowerCase() ===
         data.nickname.toLocaleLowerCase() ? (
           <span className='mr-2 text-base font-semibold text-gray-700'>
-            <a href='/profile'>
+            <Link href='/profile'>
               <button
                 type='button'
                 className='rounded border border-gray-600 bg-transparent px-4 py-2 font-semibold text-gray-700 hover:border-transparent hover:bg-blue-500 hover:text-white'
               >
                 Edit Profile
               </button>
-            </a>
+            </Link>
           </span>
         ) : null}
       </div>

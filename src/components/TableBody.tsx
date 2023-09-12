@@ -1,6 +1,7 @@
 /* eslint-disable operator-linebreak */
 /* eslint-disable indent */
 import { Prisma } from '@prisma/client';
+import Link from 'next/link';
 import CDNImage from './CDNImage';
 import RegistrationDisplay from './RegistrationDisplay';
 import ProfilePic from './ProfilePic';
@@ -31,14 +32,14 @@ export default function TableBody({
   return (
     <div className='mb-2 flex w-full flex-wrap rounded-sm border bg-white px-2'>
       <div className='flex items-center px-4 py-3'>
-        <a href={`/users/${registration.user.nickname}/`}>
+        <Link href={`/users/${registration.user.nickname}/`}>
           <ProfilePic pfpURL={registration.user.pfp} />
-        </a>
+        </Link>
         <div className='ml-3 '>
           <span className='block text-sm font-semibold leading-tight antialiased'>
-            <a href={`/users/${registration.user.nickname}/`}>
+            <Link href={`/users/${registration.user.nickname}/`}>
               {registration.user.nickname}
-            </a>
+            </Link>
           </span>
           <span className='block text-xs text-gray-600'>
             {registration.created.toDateString()}
