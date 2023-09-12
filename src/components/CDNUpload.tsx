@@ -1,6 +1,6 @@
 'use client';
 
-import { useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { IKContext, IKUpload } from 'imagekitio-react';
 import { useRouter } from 'next/navigation';
 
@@ -35,9 +35,10 @@ function CDNUpload({
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onError = (err: any) => {
-    // console.log('Error', err);
     throw new Error(`Image upload failed: ${err}`);
   };
+
+  const [inProgress, setInProgress] = useState(false);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSuccess = async (res: any) => {
@@ -50,11 +51,21 @@ function CDNUpload({
         startTransition(() => {
           setTimeout(() => {
             router.refresh();
+            setInProgress(false);
           }, 250);
         });
       }
     });
   };
+
+  if (inProgress) {
+    return (
+      <div className='flex flex-col items-center justify-center'>
+        <div className='h-8 w-8 animate-spin rounded-full border-b-2 border-gray-900' />
+        <div className='text-sm'>Uploading...</div>
+      </div>
+    );
+  }
 
   return (
     <IKContext
@@ -70,6 +81,7 @@ function CDNUpload({
         useUniqueFileName
         onError={onError}
         onSuccess={onSuccess}
+        onUploadStart={() => setInProgress(true)}
       />
     </IKContext>
   );

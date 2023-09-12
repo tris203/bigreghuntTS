@@ -8,7 +8,7 @@ import { prisma } from '@/lib/prisma';
 export async function POST(req: NextRequest) {
   const session = await getServerSession(options);
   const body = await req.json();
-  const { fileid } = body;
+  const { fileid, newReg } = body;
   // Define SessionUser type as an object with a user property containing an id property
   type SessionUser = DefaultSession['user'] & {
     id?: string;
@@ -18,17 +18,18 @@ export async function POST(req: NextRequest) {
   const userId = Number((session?.user as SessionUser).id) || 0;
 
   try {
-    const newMismatch = await prisma.require_manfix.create({
+    const newManfix = await prisma.manfix.create({
       data: {
         fileid: Number(fileid),
         userid: userId,
+        regnumber: newReg,
       },
     });
 
     const path = req.nextUrl.searchParams.get('path') || '/';
     revalidatePath(path);
 
-    return new Response(JSON.stringify(newMismatch));
+    return new Response(JSON.stringify(newManfix));
   } catch (error) {
     return new Response(JSON.stringify(error));
   }

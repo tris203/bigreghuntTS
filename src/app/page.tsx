@@ -1,17 +1,35 @@
 import './globals.css';
 import { getServerSession } from 'next-auth/next';
-import { get4DOTD, getLast5 } from '@/lib/prismaFunctions';
+import { DefaultSession } from 'next-auth';
+import {
+  get4DOTD,
+  getLast5,
+  getManFixRequiredCount,
+} from '@/lib/prismaFunctions';
 import TableBody from '@/components/TableBody';
 import Upload from './upload/page';
 import UserSummaryHome from '@/components/UserSummaryHome';
 import RegistrationDisplay from '@/components/RegistrationDisplay';
+import { options } from './api/auth/[...nextauth]/options';
+
+type SessionUser = DefaultSession['user'] & {
+  id?: string;
+};
 // import UserSummaryHome from '@/components/UserSummaryHome';
 
 export default async function Page() {
   const dotd = await get4DOTD();
-  const session = await getServerSession();
+  const session = await getServerSession(options);
 
   const last5 = await getLast5();
+
+  // eslint-disable-next-line operator-linebreak
+  const userId =
+    session?.user && (session?.user as SessionUser).id
+      ? Number((session?.user as SessionUser).id)
+      : 0;
+
+  const manfixRequiredCount = await getManFixRequiredCount(userId);
 
   return (
     <div>
@@ -25,6 +43,21 @@ export default async function Page() {
           </div>
           <div className='flex w-full justify-center text-center'>
             Find and upload the 4DOTD to score 10x Points
+          </div>
+          <div className='flex w-full justify-center text-center'>
+            {manfixRequiredCount > 0 ? (
+              <a href='/manfix'>
+                <button
+                  type='button'
+                  className='my-2 inline-flex items-center rounded bg-gray-200 px-4 py-2 font-bold text-gray-800 hover:bg-gray-300'
+                >
+                  Plates Reviews
+                  <span className='ml-2 rounded-full bg-red-500 px-2 py-1 text-xs font-bold text-white'>
+                    {manfixRequiredCount}
+                  </span>
+                </button>
+              </a>
+            ) : null}
           </div>
         </div>
         <div className='mt-2 w-full justify-center text-center '>

@@ -2,5 +2,14 @@
 export { default } from 'next-auth/middleware';
 
 export const config = {
-  matcher: ['/upload', '/api/upload', '/api/uploadToken', '/api/mismatch'],
+  matcher: [
+    '/upload',
+    '/profile',
+    '/manfix',
+    '/api/upload',
+    '/api/uploadToken',
+    '/api/mismatch',
+    '/api/report',
+    '/api/manfix',
+  ],
 };

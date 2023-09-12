@@ -1,37 +1,54 @@
-/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AiFillFlag } from 'react-icons/ai';
 import { FaNotEqual } from 'react-icons/fa';
+import { useRouter } from 'next/navigation';
 
-function ReportMismatchBar({ fileid }: { fileid: number }) {
+function ReportMismatchBar({
+  fileid,
+  mismatched,
+  reported,
+  setOpenModal,
+}: {
+  fileid: number;
+  mismatched: boolean;
+  reported: boolean;
+  setOpenModal: (value: string | undefined) => void;
+}) {
   const [currentFile] = useState(fileid);
-  const [isMismatch, setIsMismatch] = useState(false);
-  const [isFlagged, setIsFlagged] = useState(false);
+  const [isMismatch, setIsMismatch] = useState(mismatched);
+  const [isFlagged, setIsFlagged] = useState(reported);
+  const router = useRouter();
 
-  async function reportFile(reportFileid: number, reportType: string) {
+  async function reportFile(
+    reportFileid: number,
+    reportType: string,
+    ReasonID?: number,
+  ) {
     let reportURL;
+    let bodyData;
     switch (reportType) {
       case 'mismatch':
-        console.log(`Reported mismatch for fileid: ${reportFileid}`);
         reportURL = '/api/mismatch';
+        bodyData = { fileid: reportFileid };
         break;
       case 'flag':
-        console.log(`Flagged fileid: ${reportFileid}`);
+        reportURL = '/api/report';
+        bodyData = { fileid: reportFileid, ReasonID };
         break;
       default:
-        console.log(`Unknown report type: ${reportType}`);
+        break;
     }
-    if (!reportURL) {
+    if (!reportURL || !bodyData) {
       return false;
     }
 
     const success = await fetch(reportURL, {
       method: 'POST',
-      body: JSON.stringify({ fileid: reportFileid }),
+      body: JSON.stringify(bodyData),
       cache: 'no-store',
     }).then((response) => true);
 
@@ -43,8 +60,9 @@ function ReportMismatchBar({ fileid }: { fileid: number }) {
     setIsMismatch(result);
   }
 
-  async function ReportFlag(reportFileid: number) {
-    const result = await reportFile(reportFileid, 'flag');
+  async function ReportFlag(reportFileid: number, ReasonID: number) {
+    const result = await reportFile(reportFileid, 'flag', ReasonID);
+    router.refresh();
     setIsFlagged(result);
   }
 
@@ -62,7 +80,7 @@ function ReportMismatchBar({ fileid }: { fileid: number }) {
       </button>
       <button
         type='button'
-        onClick={() => ReportFlag(currentFile)}
+        onClick={() => setOpenModal('reportReason')}
         className={`transition-all duration-300 ${
           isFlagged ? 'text-red-800' : 'text-gray-500'
         }`}

@@ -37,17 +37,19 @@ model faq {
 }
 
 model files {
-  id         Int          @id @default(autoincrement())
-  filename   String?      @db.VarChar(32)
-  ext        String?      @db.VarChar(4)
-  regnumber  String?      @db.VarChar(7)
-  userid     Int
-  created    DateTime     @default(now()) @db.Timestamp(0)
-  value      Decimal?     @db.Decimal(8, 2)
-  deleted    Boolean      @default(false)
-  bonusmulti bonusmulti[]
-  user       user         @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_files_user")
-  manfix     manfix[]
+  id             Int             @id @default(autoincrement())
+  filename       String?         @db.VarChar(32)
+  ext            String?         @db.VarChar(4)
+  regnumber      String?         @db.VarChar(7)
+  userid         Int
+  created        DateTime        @default(now()) @db.Timestamp(0)
+  value          Decimal?        @db.Decimal(8, 2)
+  deleted        Boolean         @default(false)
+  bonusmulti     bonusmulti[]
+  user           user            @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_files_user")
+  manfix         manfix[]
+  report_files   report_files[]
+  require_manfix require_manfix?
 
   @@index([userid], map: "fk_files_user")
 }
@@ -66,17 +68,25 @@ model manfix {
 }
 
 model report_files {
-  ReportID    Int      @id @default(autoincrement())
-  FileID      Int
-  ReasonID    Int
-  UserID      Int
-  Report_Time DateTime @default(now()) @db.DateTime(0)
-  Acknowledge Boolean?
+  ReportID       Int            @id @default(autoincrement())
+  FileID         Int
+  ReasonID       Int
+  UserID         Int
+  Report_Time    DateTime       @default(now()) @db.DateTime(0)
+  Acknowledge    Boolean?
+  files          files          @relation(fields: [FileID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_report_files")
+  report_reasons report_reasons @relation(fields: [ReasonID], references: [ReasonID], onDelete: NoAction, onUpdate: NoAction, map: "fk_report_reasons")
+  user           user           @relation(fields: [UserID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_report_user")
+
+  @@index([FileID], map: "fk_report_files")
+  @@index([ReasonID], map: "fk_report_reasons")
+  @@index([UserID], map: "fk_report_user")
 }
 
 model report_reasons {
-  ReasonID     Int    @id @default(autoincrement())
-  ReportReason String @db.VarChar(32)
+  ReasonID     Int            @id @default(autoincrement())
+  ReportReason String         @db.VarChar(32)
+  report_files report_files[]
 }
 
 model require_manfix {
@@ -84,16 +94,18 @@ model require_manfix {
   fileid      Int      @unique(map: "uniquefile")
   userid      Int
   date        DateTime @default(now()) @db.DateTime(0)
+  files       files    @relation(fields: [fileid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_reqmanfix_files")
 }
 
 model user {
-  id          Int          @id @default(autoincrement())
-  email       String       @db.VarChar(32)
-  password    String?      @db.VarChar(32)
-  nickname    String       @default("TEST") @db.VarChar(32)
-  admin       Boolean      @default(false)
-  pfp         String?      @db.VarChar(45)
-  bonusmultis bonusmulti[]
-  files       files[]
-  manfixes    manfix[]
+  id           Int            @id @default(autoincrement())
+  email        String         @db.VarChar(32)
+  password     String?        @db.VarChar(32)
+  nickname     String         @default("TEST") @db.VarChar(32)
+  admin        Boolean        @default(false)
+  pfp          String?        @db.VarChar(45)
+  bonusmultis  bonusmulti[]
+  files        files[]
+  manfixes     manfix[]
+  report_files report_files[]
 }

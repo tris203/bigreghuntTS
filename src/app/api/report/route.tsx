@@ -8,7 +8,7 @@ import { prisma } from '@/lib/prisma';
 export async function POST(req: NextRequest) {
   const session = await getServerSession(options);
   const body = await req.json();
-  const { fileid } = body;
+  const { fileid, ReasonID } = body;
   // Define SessionUser type as an object with a user property containing an id property
   type SessionUser = DefaultSession['user'] & {
     id?: string;
@@ -17,18 +17,24 @@ export async function POST(req: NextRequest) {
   // Cast session?.user?.id as SessionUser and extract the id property
   const userId = Number((session?.user as SessionUser).id) || 0;
 
+  if (!fileid || !ReasonID || !userId) {
+    return new Response(
+      JSON.stringify({ error: 'Missing fileid or reportReason' }),
+    );
+  }
   try {
-    const newMismatch = await prisma.require_manfix.create({
+    const newReport = await prisma.report_files.create({
       data: {
-        fileid: Number(fileid),
-        userid: userId,
+        FileID: Number(fileid),
+        UserID: userId,
+        ReasonID: Number(ReasonID),
       },
     });
 
     const path = req.nextUrl.searchParams.get('path') || '/';
     revalidatePath(path);
 
-    return new Response(JSON.stringify(newMismatch));
+    return new Response(JSON.stringify(newReport));
   } catch (error) {
     return new Response(JSON.stringify(error));
   }

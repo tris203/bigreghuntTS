@@ -1,3 +1,6 @@
+/* eslint-disable indent */
+/* eslint-disable operator-linebreak */
+import { getServerSession } from 'next-auth/next';
 import { GetAllUserScores } from '@/lib/prismaFunctions';
 
 type UserScore = {
@@ -21,6 +24,7 @@ async function selectUserFromData(usernick: string, data: UserScore[]) {
 async function UserSummary({ usernick }: { usernick: string }) {
   const dbData = await GetAllUserScores();
   const data = await selectUserFromData(usernick, dbData);
+  const session = await getServerSession();
 
   return (
     <>
@@ -28,6 +32,19 @@ async function UserSummary({ usernick }: { usernick: string }) {
         <span className='mr-2 text-center text-2xl text-gray-700'>
           {data.nickname}
         </span>
+        {session?.user?.name?.toLowerCase() ===
+        data.nickname.toLocaleLowerCase() ? (
+          <span className='mr-2 text-base font-semibold text-gray-700'>
+            <a href='/profile'>
+              <button
+                type='button'
+                className='rounded border border-gray-600 bg-transparent px-4 py-2 font-semibold text-gray-700 hover:border-transparent hover:bg-blue-500 hover:text-white'
+              >
+                Edit Profile
+              </button>
+            </a>
+          </span>
+        ) : null}
       </div>
       <div className='pt-3 text-center'>
         <span className='mr-2 text-base font-semibold text-gray-700'>

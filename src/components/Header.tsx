@@ -25,7 +25,7 @@ async function Header() {
 
       <span>
         {session?.user?.name ? (
-          <a href='/api/auth/signout'>
+          <a href='/profile'>
             <span className='top-navigation-icon flex'>
               <ProfilePic pfpURL={session.user?.image} />
               <span className='hidden md:flex'>{session.user?.name}</span>

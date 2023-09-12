@@ -1,36 +1,57 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable indent */
 import { Prisma } from '@prisma/client';
 import CDNImage from './CDNImage';
 import RegistrationDisplay from './RegistrationDisplay';
 import ProfilePic from './ProfilePic';
-import ReportMismatchBar from './ReportMismatchBar';
+import { getReportReasons } from '@/lib/prismaFunctions';
+import ReportMismatchWrapper from './ReportMismatchWrapper';
+import RegistrationInput from './RegistrationInput';
 
 type filesWithUserBonsMulti = Prisma.filesGetPayload<{
   include: {
     bonusmulti: true;
     user: { select: { nickname: true; pfp: true } };
+    require_manfix: { select: { manfixreqid: true } };
+    report_files: { select: { ReportID: true } };
   };
 }>;
 
+const reportReasons = await getReportReasons();
+
 export default function TableBody({
   registration,
+  isfixing,
+  fixedReg,
 }: {
   registration: filesWithUserBonsMulti;
+  isfixing?: boolean;
+  fixedReg?: string;
 }) {
   return (
     <div className='mb-2 flex w-full flex-wrap rounded-sm border bg-white px-2'>
       <div className='flex items-center px-4 py-3'>
-        <ProfilePic pfpURL={registration.user.pfp} />
+        <a href={`/users/${registration.user.nickname}/`}>
+          <ProfilePic pfpURL={registration.user.pfp} />
+        </a>
         <div className='ml-3 '>
           <span className='block text-sm font-semibold leading-tight antialiased'>
-            {registration.user.nickname}
+            <a href={`/users/${registration.user.nickname}/`}>
+              {registration.user.nickname}
+            </a>
           </span>
           <span className='block text-xs text-gray-600'>
             {registration.created.toDateString()}
           </span>
         </div>
       </div>
-      <div className='container relative h-96'>
+      <div
+        className={`container relative h-96 ${
+          registration.report_files.length > 0
+            ? 'blur-lg transition-all duration-700 hover:blur-none'
+            : null
+        } `}
+      >
         <CDNImage
           key={registration.id}
           filename={
@@ -38,12 +59,18 @@ export default function TableBody({
               ? `${registration.filename}.${registration.ext}`
               : `${registration.filename}`
           }
-          regNumber={registration.regnumber}
+          regNumber={fixedReg ?? registration.regnumber}
         />
       </div>
       <div className='mx-4 mb-2 mt-3 flex w-full items-center justify-between'>
         <div className='flex gap-5'>
-          <RegistrationDisplay regNumber={registration.regnumber} />
+          {isfixing ? (
+            <RegistrationInput fileid={registration.id} />
+          ) : (
+            <RegistrationDisplay
+              regNumber={fixedReg ?? registration.regnumber}
+            />
+          )}
         </div>
         <div className='flex'>
           {registration.bonusmulti.length > 0 ? (
@@ -78,7 +105,11 @@ export default function TableBody({
             : 'Loading...'}
         </div>
         <div className='flex'>
-          <ReportMismatchBar fileid={registration.id} />
+          <ReportMismatchWrapper
+            key={registration.id}
+            reportReasons={reportReasons}
+            registration={registration}
+          />
         </div>
       </div>
     </div>

@@ -9,8 +9,13 @@ export async function getData(page: number, userNick: string) {
     include: {
       bonusmulti: true,
       user: { select: { nickname: true, pfp: true } },
+      require_manfix: { select: { manfixreqid: true } },
+      report_files: {
+        select: { ReportID: true },
+        where: { Acknowledge: false || null },
+      },
     },
-    where: { user: { nickname: userNick } },
+    where: { user: { nickname: userNick }, deleted: false },
     skip: pageCalc * perPage || 0,
     take: perPage,
     orderBy: { created: 'desc' },
@@ -20,10 +25,19 @@ export async function getData(page: number, userNick: string) {
 }
 
 export async function getLast5() {
-  const filesReturn = prisma.files.findMany({
+  const filesReturn = await prisma.files.findMany({
     include: {
       bonusmulti: true,
       user: { select: { nickname: true, pfp: true } },
+      require_manfix: { select: { manfixreqid: true } },
+      report_files: {
+        select: { ReportID: true },
+        where: { Acknowledge: false || null },
+      },
+    },
+    where: {
+      deleted: false,
+      report_files: { none: { Acknowledge: false || null } },
     },
     skip: 0,
     take: 5,
@@ -72,7 +86,9 @@ export async function GetAllUserScores() {
 }
 
 export async function getCount(userNick: string) {
-  const count = prisma.files.count({ where: { user: { nickname: userNick } } });
+  const count = prisma.files.count({
+    where: { user: { nickname: userNick }, deleted: false },
+  });
   return count;
 }
 
@@ -108,18 +124,18 @@ export async function getFilesWithLength(length: number, page: number) {
   return filesReturn;
 }
 
-export async function getAllCount() {
-  const count = prisma.files.count();
-  return count;
-}
-
 export async function getSpecificReg(regnumber: number) {
   const filesReturn = prisma.files.findMany({
     include: {
       bonusmulti: true,
       user: { select: { nickname: true, pfp: true } },
+      require_manfix: { select: { manfixreqid: true } },
+      report_files: {
+        select: { ReportID: true },
+        where: { Acknowledge: false || null },
+      },
     },
-    where: { regnumber: regnumber.toString() },
+    where: { regnumber: regnumber.toString(), deleted: false },
     orderBy: { created: 'desc' },
   });
   return filesReturn;
@@ -143,4 +159,115 @@ export async function getAllNumberbyLength() {
  and regnumber != '0'
  group by length(regnumber)`;
   return status as LengthStatus[];
+}
+
+export async function getReportReasons() {
+  const reasons = prisma.report_reasons.findMany();
+  return reasons;
+}
+
+export async function getManFixRequiredCount(userID: number) {
+  if (userID === 0) return 0;
+
+  const alreadyFixedFiles = await prisma.manfix.findMany({
+    where: { userid: userID },
+    select: { fileid: true },
+  });
+
+  const filesRequiringFix = await prisma.require_manfix.findMany({});
+
+  const filesOverFixedThreshold = await prisma.manfix.groupBy({
+    by: ['fileid'],
+    having: {
+      fileid: {
+        _count: {
+          gt: 1,
+        },
+      },
+    },
+  });
+
+  const count = await prisma.files.count({
+    where: {
+      deleted: false,
+      OR: [
+        { regnumber: '0' },
+        { id: { in: filesRequiringFix.map((x) => x.fileid) } },
+      ],
+      NOT: [
+        { id: { in: alreadyFixedFiles.map((x) => x.fileid) } },
+        { id: { in: filesOverFixedThreshold.map((x) => x.fileid) } },
+      ],
+    },
+  });
+
+  return count;
+}
+
+export async function getManFixRequiredFiles(userID: number) {
+  const alreadyFixedFiles = await prisma.manfix.findMany({
+    where: { userid: userID },
+    select: { fileid: true },
+  });
+
+  const filesRequiringFix = await prisma.require_manfix.findMany({});
+
+  const filesOverFixedThreshold = await prisma.manfix.groupBy({
+    by: ['fileid'],
+    having: {
+      fileid: {
+        _count: {
+          gt: 1,
+        },
+      },
+    },
+  });
+
+  const files = await prisma.files.findMany({
+    include: {
+      bonusmulti: true,
+      user: { select: { nickname: true, pfp: true } },
+      require_manfix: { select: { manfixreqid: true } },
+      report_files: {
+        select: { ReportID: true },
+        where: { Acknowledge: false || null },
+      },
+    },
+    where: {
+      deleted: false,
+      OR: [
+        { regnumber: '0' },
+        { id: { in: filesRequiringFix.map((x) => x.fileid) } },
+      ],
+      NOT: [
+        { id: { in: alreadyFixedFiles.map((x) => x.fileid) } },
+        { id: { in: filesOverFixedThreshold.map((x) => x.fileid) } },
+      ],
+    },
+  });
+
+  return files;
+}
+
+export async function getHistoricManFix(userID: number) {
+  const historicManFix = await prisma.manfix.findMany({
+    include: {
+      file: {
+        include: {
+          bonusmulti: true,
+          user: { select: { nickname: true, pfp: true } },
+          require_manfix: { select: { manfixreqid: true } },
+          report_files: {
+            select: { ReportID: true },
+            where: { Acknowledge: false || null },
+          },
+        },
+      },
+    },
+    take: 5,
+    where: { userid: userID },
+    orderBy: { date_fixed: 'desc' },
+  });
+
+  return historicManFix;
 }

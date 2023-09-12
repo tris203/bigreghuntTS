@@ -14,7 +14,12 @@ function SearchBox() {
           placeholder='Search'
           required
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={
+            (e) =>
+              // eslint-disable-next-line implicit-arrow-linebreak
+              setSearchTerm(e.target.value)
+            // eslint-disable-next-line react/jsx-curly-newline
+          }
         />
         <button
           type='submit'

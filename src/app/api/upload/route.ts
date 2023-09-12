@@ -14,7 +14,7 @@ export async function POST(req: Request) {
   };
 
   // Cast session?.user?.id as SessionUser and extract the id property
-  const userId = Number((session?.user as SessionUser).id) || 1;
+  const userId = Number((session?.user as SessionUser).id) || 0;
 
   const newRecord = await prisma.files.create({
     data: {
