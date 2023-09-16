@@ -6,6 +6,7 @@ import FourDOTDWrapper from '@/components/Wrappers/FourDOTD';
 import ManFixReqWrapper from '@/components/Wrappers/ManFixReq';
 import UploadWrapper from '@/components/Wrappers/Upload';
 import UserSummaryWrapper from '@/components/Wrappers/UserSummary';
+import Last5Suspense from '@/components/Wrappers/Last5Suspense';
 
 export default async function Page() {
   return (
@@ -24,7 +25,7 @@ export default async function Page() {
             Find and upload the 4DOTD to score 10x Points
           </div>
           <div className='flex w-full justify-center text-center'>
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={null}>
               <ManFixReqWrapper />
             </Suspense>
           </div>
@@ -47,7 +48,7 @@ export default async function Page() {
       <div className='flex w-full justify-center'>Last 5 Uploads</div>
       <div className='flex w-full justify-center'>
         <div className='mx-2 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-5'>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<Last5Suspense />}>
             <Last5Wrapper />
           </Suspense>
         </div>
