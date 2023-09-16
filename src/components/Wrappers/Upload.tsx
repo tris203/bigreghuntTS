@@ -11,7 +11,7 @@ export default async function UploadWrapper() {
         <Upload />
       ) : (
         <div className='pointer-events-none blur-sm'>
-          <UploadWrapper />
+          <Upload />
           Please Log In to Upload
         </div>
       )}
