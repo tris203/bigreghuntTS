@@ -25,6 +25,7 @@ export async function getData(page: number, userNick: string) {
 }
 
 export async function getLast5() {
+  const startTime = new Date();
   const filesReturn = await prisma.files.findMany({
     include: {
       bonusmulti: true,
@@ -44,6 +45,10 @@ export async function getLast5() {
     orderBy: { id: 'desc' },
   });
 
+  const endTime = new Date();
+  const timeDiff = endTime.getTime() - startTime.getTime();
+  // eslint-disable-next-line no-console
+  console.log(`Query took ${timeDiff}ms`);
   return filesReturn;
 }
 
