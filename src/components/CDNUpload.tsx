@@ -52,7 +52,7 @@ function CDNUpload({
           setTimeout(() => {
             router.refresh();
             setInProgress(false);
-          }, 250);
+          }, 1000);
         });
       }
     });
