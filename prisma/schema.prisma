@@ -10,7 +10,7 @@ datasource db {
 model dotd {
   did  Int      @unique(map: "4did") @default(autoincrement()) @map("4did")
   date DateTime @default(now()) @db.DateTime(0)
-  reg  String   @db.VarChar(9)
+  reg  Int   @db.Int
 
   @@map("4dotd")
 }

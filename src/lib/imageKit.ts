@@ -1,3 +1,5 @@
+import { urlEndpoint } from './static';
+
 type ImageKitLoaderParams = {
     src: string;
     width: number;
@@ -12,7 +14,6 @@ const imageKitLoader = ({ src, width, quality }: ImageKitLoaderParams): ImageKit
     params.push(`q-${quality}`);
   }
   const paramsString = params.join(',');
-  const urlEndpoint = 'https://ik.imagekit.io/bigreghunt';
   return `${urlEndpoint}/${src}?tr=${paramsString}`;
 };
 

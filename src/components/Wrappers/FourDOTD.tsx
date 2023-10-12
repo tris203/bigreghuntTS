@@ -2,6 +2,7 @@ import { get4DOTD } from '@/lib/prismaFunctions';
 import RegistrationDisplay from '../RegistrationDisplay';
 
 export default async function FourDOTDWrapper() {
-  const dotd = await get4DOTD();
-  return <RegistrationDisplay regNumber={dotd?.reg || ''} />;
+  const dotdnum = await get4DOTD();
+  const dotd = dotdnum?.reg.toString() || '';
+  return <RegistrationDisplay regNumber={dotd} />;
 }
