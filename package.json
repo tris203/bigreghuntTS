@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@google-cloud/storage": "^7.3.0",
     "@prisma/client": "^5.4.2",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@types/node": "20.3.1",
