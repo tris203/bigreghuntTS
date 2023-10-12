@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { getServerSession } from 'next-auth/next';
 import { DefaultSession } from 'next-auth';
 import { options } from '@/app/api/auth/[...nextauth]/options';
@@ -26,6 +27,7 @@ export async function POST(req: Request) {
   });
 
   await fetch('https://api.platerecognizer.com/v1/plate-reader/', {
+    cache: 'no-cache',
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -41,11 +43,13 @@ export async function POST(req: Request) {
     .then((res) => res.json())
     .then(async (json) => {
       if (json.results.length === 0) {
+        console.log(`Unable to find plate for ${newRecord.id}`);
         await prisma.files.update({
           where: { id: newRecord.id },
           data: { regnumber: '0' },
         });
       } else {
+        console.log(`Found plate ${json.results[0].plate} for ${newRecord.id}`);
         await prisma.files.update({
           where: { id: newRecord.id },
           data: {
@@ -61,11 +65,12 @@ export async function POST(req: Request) {
   });
 
   if (!plate?.regnumber) {
+    console.log('no regnumber');
     return new Response(JSON.stringify(newRecord));
   }
 
   const plateToValue = plate.regnumber?.length === 1 ? `${plate.regnumber}${plate.regnumber}` : plate.regnumber;
-  const webResponse = (await fetch(`https://digits.gg/reg.php?regid=G${plateToValue}C`)).text();
+  const webResponse = (await fetch(`https://digits.gg/reg.php?regid=G${plateToValue}C`, { cache: 'no-cache' })).text();
   const value = (await webResponse).match(/Current valuation is: £([0-9.,]*)/m);
   let newValue = value ? value[1].replace(/,/g, '') : '0';
   if (plate.regnumber?.length === 1) {
