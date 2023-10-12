@@ -8,9 +8,9 @@ datasource db {
 }
 
 model dotd {
-  did  Int      @unique(map: "4did") @default(autoincrement()) @map("4did")
+  did  Int      @unique(map: "4did") @default(autoincrement()) @map("4did") @db.UnsignedInt
   date DateTime @default(now()) @db.DateTime(0)
-  reg  Int   @db.Int
+  reg  Int      @default(0)
 
   @@map("4dotd")
 }
@@ -52,6 +52,8 @@ model files {
   require_manfix require_manfix?
 
   @@index([userid], map: "fk_files_user")
+  @@index([id, filename, ext, regnumber, userid, created, value, deleted], map: "Index 4")
+  @@index([created], map: "idx_files_created")
 }
 
 model manfix {
