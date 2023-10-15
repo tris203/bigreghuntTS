@@ -7,17 +7,28 @@ import { useRouter } from 'next/navigation';
 
 export default function RegistrationInput({ fileid }: { fileid: number }) {
   const [newReg, setNewReg] = useState('');
+  const [IsUpdating, setIsUpdating] = useState(false);
   const router = useRouter();
 
   function updateReg(e: React.FormEvent<HTMLButtonElement>) {
     e.preventDefault();
+    setIsUpdating(true);
     const success = fetch('/api/manfix', {
       method: 'POST',
       body: JSON.stringify({ fileid, newReg }),
       cache: 'no-store',
-    }).then(() => true);
-    router.refresh();
+    }).then(() => {
+      setIsUpdating(false);
+      router.refresh();
+    });
+
     return success;
+  }
+
+  if (IsUpdating) {
+    return (
+      <div>Updating</div>
+    );
   }
 
   return (
