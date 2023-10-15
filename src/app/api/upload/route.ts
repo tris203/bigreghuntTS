@@ -64,7 +64,7 @@ export async function POST(req: Request) {
     where: { id: newRecord.id },
   });
 
-  if (!plate?.regnumber) {
+  if (!plate?.regnumber || plate.regnumber === '0') {
     console.log('no regnumber');
     return new Response(JSON.stringify(newRecord));
   }
