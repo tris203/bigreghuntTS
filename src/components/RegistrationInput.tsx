@@ -18,6 +18,7 @@ export default function RegistrationInput({ fileid }: { fileid: number }) {
       body: JSON.stringify({ fileid, newReg }),
       cache: 'no-store',
     }).then(() => {
+      // maybe revalidate rather than refresh?
       router.refresh();
       setIsUpdating(false);
     });
