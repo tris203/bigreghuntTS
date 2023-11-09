@@ -18,8 +18,8 @@ export default function RegistrationInput({ fileid }: { fileid: number }) {
       body: JSON.stringify({ fileid, newReg }),
       cache: 'no-store',
     }).then(() => {
-      setIsUpdating(false);
       router.refresh();
+      setIsUpdating(false);
     });
 
     return success;
