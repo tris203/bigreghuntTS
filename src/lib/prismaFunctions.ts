@@ -1,6 +1,33 @@
 import { prisma } from '@/lib/prisma';
 import { perPage } from './static';
 
+export async function createUser(
+  nickname: string,
+  email: string,
+  password: string,
+) {
+  const existingUser = await prisma.user.findFirst({
+    where: { email },
+  });
+  if (existingUser) {
+    return null;
+  }
+  const existingNickname = await prisma.user.findFirst({
+    where: { nickname },
+  });
+  if (existingNickname) {
+    return null;
+  }
+  const user = await prisma.user.create({
+    data: {
+      nickname,
+      email,
+      password,
+    },
+  });
+  return user;
+}
+
 export async function getData(page: number, userNick: string) {
   let pageCalc = page - 1;
   if (pageCalc < 0) pageCalc = 0;

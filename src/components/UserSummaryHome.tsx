@@ -27,42 +27,42 @@ async function UserSummary({ usernick }: { usernick: string }) {
   return (
     <div className='w-full flex-col justify-center text-center'>
       <div className='flex w-full justify-center'>
-        <RegistrationDisplay regNumber={data.nickname} />
+        <RegistrationDisplay regNumber={usernick} />
       </div>
       <div className='flex w-full justify-center text-center text-base font-semibold text-gray-700'>
-        {data.FixedNumber.toString()} Fixed
+        {data?.FixedNumber.toString() || '0'} Fixed
       </div>
       <div className='flex w-full justify-center text-center text-base font-semibold text-gray-700'>
-        {Number(data.FixedTotal).toLocaleString('en-GB', {
+        {Number(data?.FixedTotal || 0).toLocaleString('en-GB', {
           currency: 'GBP',
           style: 'currency',
         })}
       </div>
 
       <div className='flex w-full justify-center text-center text-base font-semibold text-gray-700'>
-        {data.UploadNumber.toString()} Uploaded
+        {data?.UploadNumber.toString() || '0'} Uploaded
       </div>
 
       <div className='flex w-full justify-center text-center text-base font-semibold text-gray-700'>
-        {data.UploadTotal.toLocaleString('en-GB', {
+        {data?.UploadTotal.toLocaleString('en-GB', {
           currency: 'GBP',
           style: 'currency',
         })}
       </div>
 
       <div className='flex w-full justify-center text-center text-base font-semibold text-gray-700'>
-        {data.total.toLocaleString('en-GB', {
+        {data?.total.toLocaleString('en-GB', {
           currency: 'GBP',
           style: 'currency',
         })}
       </div>
 
       <div className='flex w-full justify-center text-center text-base font-semibold text-gray-700'>
-        <b>{data.Rank.toString()}</b>
-        {data.Rank.toString() === '1' ? 'st' : ''}
-        {data.Rank.toString() === '2' ? 'nd' : ''}
-        {data.Rank.toString() === '3' ? 'rd' : ''}
-        {data.Rank > 3 ? 'th' : ''}/{dbData.length.toString()}
+        <b>{data?.Rank.toString() || '?'}</b>
+        {data?.Rank.toString() === '1' ? 'st' : ''}
+        {data?.Rank.toString() === '2' ? 'nd' : ''}
+        {data?.Rank.toString() === '3' ? 'rd' : ''}
+        {data?.Rank > 3 ? 'th' : ''}/{dbData.length.toString()}
       </div>
     </div>
   );
