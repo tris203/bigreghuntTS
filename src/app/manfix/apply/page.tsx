@@ -1,6 +1,6 @@
 import CDNImage from '@/components/CDNImage';
 import RegistrationDisplay from '@/components/RegistrationDisplay';
-import { getReadyToApplyManFixes } from '@/lib/prismaFunctions';
+import { getReadyToApplyManFixes, ManFix } from '@/lib/prismaFunctions';
 import { prisma } from '@/lib/prisma';
 
 async function sendToDb(formData: FormData) {
@@ -10,7 +10,7 @@ async function sendToDb(formData: FormData) {
   const manfixes = await getReadyToApplyManFixes();
 
   const newRegData = manfixes.find(
-    (manfix) => manfix.fileid === Number(fileid),
+    (manfix: ManFix) => manfix.fileid === Number(fileid),
   );
 
   const newReg = newRegData?.regnumber;

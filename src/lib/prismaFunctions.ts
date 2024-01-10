@@ -1,6 +1,15 @@
 import { prisma } from '@/lib/prisma';
 import { perPage, manfixConfirmationsRequired } from './static';
 
+export type ManFix = {
+  fileid: number;
+  filename: string;
+  ext: string;
+  regnumber: string;
+  CurrentReg: string;
+  fixcount: number;
+};
+
 export async function createUser(
   nickname: string,
   email: string,
@@ -255,14 +264,6 @@ export async function getManFixRequiredFiles(userID: number) {
 }
 
 export async function getReadyToApplyManFixes() {
-  type ManFix = {
-    fileid: number;
-    filename: string;
-    ext: string;
-    regnumber: string;
-    CurrentReg: string;
-    fixcount: number;
-  };
   const readyToFix = await prisma.$queryRaw<ManFix[]>`
 SELECT mf.fileid, f.filename, f.ext, mf.regnumber, MIN(f.regnumber) as 'CurrentReg', count(mf.regnumber) as fixcount from manfix mf
 join files f on mf.fileid = f.id 
