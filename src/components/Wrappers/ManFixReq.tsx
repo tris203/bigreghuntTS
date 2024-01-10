@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getServerSession } from 'next-auth/next';
 import { DefaultSession } from 'next-auth';
-import { getManFixRequiredCount } from '@/lib/prismaFunctions';
+import { getManFixRequiredFiles } from '@/lib/prismaFunctions';
 import { options } from '@/app/api/auth/[...nextauth]/options';
 
 export default async function ManFixReqWrapper() {
@@ -17,7 +17,9 @@ export default async function ManFixReqWrapper() {
       ? Number((session?.user as SessionUser).id)
       : 0;
 
-  const manfixRequiredCount = await getManFixRequiredCount(userId);
+  const manFixRequiredData = await getManFixRequiredFiles(userId);
+
+  const manfixRequiredCount = manFixRequiredData.length;
 
   return (
     <div>

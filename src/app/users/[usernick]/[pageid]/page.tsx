@@ -9,8 +9,8 @@ export default async function UserNickPage({
 }: {
   params: { pageid: number; usernick: string };
 }) {
-  const data = await getData(params.pageid, params.usernick);
-  const count = await getCount(params.usernick);
+  const data = await getData(params.pageid, decodeURIComponent(params.usernick));
+  const count = await getCount(decodeURIComponent(params.usernick));
   const pages = Math.ceil(count / perPage);
 
   if (data.length === 0) {
@@ -28,7 +28,7 @@ export default async function UserNickPage({
 
   return (
     <main>
-      <UserSummary usernick={params.usernick} />
+      <UserSummary usernick={decodeURIComponent(params.usernick)} />
       <div className='ml-2 mt-1 inline-flex'>
         <h3 className='mr-2 pb-2 text-sm font-bold text-gray-800'>POSTS</h3>
       </div>

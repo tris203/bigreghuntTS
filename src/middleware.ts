@@ -6,6 +6,7 @@ export const config = {
     '/upload',
     '/profile',
     '/manfix',
+    '/manfix/apply',
     '/api/upload',
     '/api/uploadToken',
     '/api/mismatch',
