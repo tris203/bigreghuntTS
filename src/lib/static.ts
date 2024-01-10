@@ -9,3 +9,5 @@ export function countPlatesAvailable(length: number): number {
   }
   return 0;
 }
+
+export const manfixConfirmationsRequired = 2;

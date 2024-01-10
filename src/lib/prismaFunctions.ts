@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { perPage } from './static';
+import { perPage, manfixConfirmationsRequired } from './static';
 
 export async function createUser(
   nickname: string,
@@ -91,7 +91,7 @@ export async function GetAllUserScores() {
     total: number;
   };
 
-  const users = await prisma.$queryRaw`
+  const users = await prisma.$queryRaw<UserScore[]>`
   WITH uploadstats as (
   SELECT sum(f.value * COALESCE(bm.multi,1)) as UploadTotal, count(f.id) as UploadNumber, f.userid  FROM files f
    left join bonusmulti bm on bm.fileid = f.id and bm.userid = f.userid
@@ -132,7 +132,7 @@ export async function getFilesWithLength(length: number, page: number) {
     regnumber: string;
   };
 
-  const relatedRegs: RelatedReg[] = await prisma.$queryRaw`
+  const relatedRegs = await prisma.$queryRaw<RelatedReg[]>`
  SELECT regnumber from files
  where deleted = '0'
  and regnumber != '0'
@@ -185,12 +185,12 @@ export async function getAllNumberbyLength() {
     count: number;
     length: number;
   };
-  const status = await prisma.$queryRaw`
+  const status = await prisma.$queryRaw<LengthStatus[]>`
  SELECT count(DISTINCT(regnumber)) as 'count', length(regnumber) as 'length' from files
  where deleted = '0'
  and regnumber != '0'
  group by length(regnumber)`;
-  return status as LengthStatus[];
+  return status;
 }
 
 export async function getReportReasons() {
@@ -198,45 +198,25 @@ export async function getReportReasons() {
   return reasons;
 }
 
-export async function getManFixRequiredCount(userID: number) {
-  if (userID === 0) return 0;
-
-  const alreadyFixedFiles = await prisma.manfix.findMany({
-    where: { userid: userID },
-    select: { fileid: true },
-  });
-
-  const filesRequiringFix = await prisma.require_manfix.findMany({});
-
+export async function getManFixOverThreshold() {
   const filesOverFixedThreshold = await prisma.manfix.groupBy({
     by: ['fileid'],
     having: {
       fileid: {
         _count: {
-          gt: 1,
+          gt: manfixConfirmationsRequired,
         },
       },
     },
   });
 
-  const count = await prisma.files.count({
-    where: {
-      deleted: false,
-      OR: [
-        { regnumber: '0' },
-        { id: { in: filesRequiringFix.map((x) => x.fileid) } },
-      ],
-      NOT: [
-        { id: { in: alreadyFixedFiles.map((x) => x.fileid) } },
-        { id: { in: filesOverFixedThreshold.map((x) => x.fileid) } },
-      ],
-    },
-  });
-
-  return count;
+  return filesOverFixedThreshold;
 }
 
 export async function getManFixRequiredFiles(userID: number) {
+  if (userID === 0) {
+    return [];
+  }
   const alreadyFixedFiles = await prisma.manfix.findMany({
     where: { userid: userID },
     select: { fileid: true },
@@ -244,16 +224,7 @@ export async function getManFixRequiredFiles(userID: number) {
 
   const filesRequiringFix = await prisma.require_manfix.findMany({});
 
-  const filesOverFixedThreshold = await prisma.manfix.groupBy({
-    by: ['fileid'],
-    having: {
-      fileid: {
-        _count: {
-          gt: 1,
-        },
-      },
-    },
-  });
+  const filesOverFixedThreshold = await getManFixOverThreshold();
 
   const files = await prisma.files.findMany({
     include: {
@@ -269,9 +240,11 @@ export async function getManFixRequiredFiles(userID: number) {
       deleted: false,
       OR: [
         { regnumber: '0' },
+        { regnumber: null },
         { id: { in: filesRequiringFix.map((x) => x.fileid) } },
       ],
       NOT: [
+        { report_files: { some: { Acknowledge: false || null } } },
         { id: { in: alreadyFixedFiles.map((x) => x.fileid) } },
         { id: { in: filesOverFixedThreshold.map((x) => x.fileid) } },
       ],
@@ -279,6 +252,25 @@ export async function getManFixRequiredFiles(userID: number) {
   });
 
   return files;
+}
+
+export async function getReadyToApplyManFixes() {
+  type ManFix = {
+    fileid: number;
+    filename: string;
+    ext: string;
+    regnumber: string;
+    CurrentReg: string;
+    fixcount: number;
+  };
+  const readyToFix = await prisma.$queryRaw<ManFix[]>`
+SELECT mf.fileid, f.filename, f.ext, mf.regnumber, MIN(f.regnumber) as 'CurrentReg', count(mf.regnumber) as fixcount from manfix mf
+join files f on mf.fileid = f.id 
+where mf.regnumber != f.regnumber 
+and f.deleted = '0' 
+GROUP BY mf.fileid, mf.regnumber HAVING count(fixcount) >= ${manfixConfirmationsRequired};`;
+
+  return readyToFix;
 }
 
 export async function getHistoricManFix(userID: number) {
