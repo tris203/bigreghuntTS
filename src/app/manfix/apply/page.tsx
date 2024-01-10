@@ -14,6 +14,7 @@ async function sendToDb(formData: FormData) {
   )?.regnumber;
 
   if (!fileid || !newReg) {
+    /* eslint-disable-next-line no-console */
     console.log('no fileid or newReg');
     return;
   }
@@ -29,6 +30,7 @@ async function sendToDb(formData: FormData) {
   if ((newReg as string).length === 1) {
     newValue = (parseInt(newValue, 10) * 1.7).toString();
   }
+  /* eslint-disable-next-line no-console */
   console.log(`new value is ${newValue}`);
   await prisma.files.update({
     data: { value: newValue, regnumber: newReg as string },
