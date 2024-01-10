@@ -9,9 +9,11 @@ async function sendToDb(formData: FormData) {
   const fileid = formData.get('fileid');
   const manfixes = await getReadyToApplyManFixes();
 
-  const newReg = manfixes.find(
+  const newRegData = manfixes.find(
     (manfix) => manfix.fileid === Number(fileid),
-  )?.regnumber;
+  );
+
+  const newReg = newRegData?.regnumber;
 
   if (!fileid || !newReg) {
     /* eslint-disable-next-line no-console */
