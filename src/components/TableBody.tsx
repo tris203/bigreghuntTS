@@ -32,12 +32,12 @@ export default function TableBody({
   return (
     <div className='mb-2 flex w-full flex-wrap rounded-sm border bg-white px-2'>
       <div className='flex items-center px-4 py-3'>
-        <Link href={`/users/${registration.user.nickname}/`}>
+        <Link href={`/users/${encodeURIComponent(registration.user.nickname)}/`}>
           <ProfilePic pfpURL={registration.user.pfp} />
         </Link>
         <div className='ml-3 '>
           <span className='block text-sm font-semibold leading-tight antialiased'>
-            <Link href={`/users/${registration.user.nickname}/`}>
+            <Link href={`/users/${encodeURIComponent(registration.user.nickname)}/`}>
               {registration.user.nickname}
             </Link>
           </span>
